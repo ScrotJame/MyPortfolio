@@ -44,7 +44,7 @@ export const projects: Project[] = [
   {
     id: 'dispatch', name: 'EV Driver Coordination',
     label: { en: 'A clearer view of city-wide dispatch.', vi: 'Góc nhìn rõ ràng hơn về điều phối.' },
-    description: { en: 'An AI-assisted dispatch MVP and simulation for electric-vehicle drivers in Hanoi.', vi: 'MVP điều phối có AI hỗ trợ và mô phỏng cho tài xế xe điện tại Hà Nội.' },
+    description: { en: '', vi: '' },
     role: { en: 'Team contribution · VSF internship', vi: 'Đóng góp trong nhóm · Thực tập VSF' },
     date: { en: 'Sep 2026 — Present', vi: '09/2026 — Hiện tại' },
     categories: ['Web', 'AI'], tech: ['React', 'TypeScript', 'FastAPI', 'TomTom'],

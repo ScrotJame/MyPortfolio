@@ -85,7 +85,7 @@ const vi: Copy = {
   experienceHeading: 'Kinh nghiệm làm việc', experienceIntro: 'Từ kỳ thực tập đầu tiên đến ứng dụng production và hệ thống tích hợp AI.',
   current: 'Hiện tại',
   experiences: [
-    { company: 'VSF', role: 'Thực tập Frontend & Phát triển module', date: '09/2026 — Hiện tại', description: 'Xây dựng dashboard React/TypeScript cho MVP điều phối tài xế xe điện bằng AI, với bản đồ 2D/3D, đề xuất điều phối và phân tích mô phỏng.' },
+    { company: 'VSF', role: 'Thực tập Frontend & Phát triển module', date: '09/2026 — Hiện tại', description: '' },
     { company: 'iHouzz Technology', role: 'Lập trình viên Flutter', date: '10/2025 — 06/2026', description: 'Phát triển và bảo trì ứng dụng Flutter production. Áp dụng Clean Architecture, tích hợp API, xây dựng UI responsive và phân tích hiệu năng bằng Flutter DevTools.' },
     { company: 'Enspire Digital', role: 'Lập trình viên Mobile Game', date: '06/2025 — 07/2025', description: 'Bảo trì ứng dụng Flutter và kết nối module iOS native với Unity bằng Platform Channels. Hoàn thiện tính năng, hình ảnh và độ ổn định ứng dụng.' },
     { company: 'IMSOFT', role: 'Thực tập lập trình game', date: '02/2025 — 04/2025', description: 'Tích lũy kinh nghiệm thực hành ban đầu trong phát triển game.' },
