@@ -34,14 +34,14 @@ English is the default. Language and theme are stored in browser localStorage; s
 
 ## GitHub Pages
 
-The workflow `.github/workflows/deploy.yml` validates pushes to `main`. Deployment runs only when the owner manually selects **Run workflow**; pushing code alone does not publish the website.
+The workflow `.github/workflows/deploy.yml` validates, builds, and deploys every push to `main`. The deploy job runs only after all checks and the production build succeed. **Run workflow** remains available for manual deployment.
 
 1. In repository **Settings → Pages**, select **GitHub Actions** as the build source.
-2. Open **Actions → Verify and deploy portfolio → Run workflow**.
-3. Select `main` and click **Run workflow**. Wait for the `build` and `deploy` jobs to succeed.
+2. Push your changes to `main`, or open **Actions → Verify and deploy portfolio → Run workflow** and select `main` to deploy manually.
+3. Wait for the `build` and `deploy` jobs to succeed.
 4. Open the website URL shown by the `github-pages` environment or **Settings → Pages**.
 
-After future code changes, repeat step 2 to publish the new version. The repository must support Pages hosting, for example a public repository on GitHub Free.
+Future pushes to `main` automatically publish the new version after verification succeeds. The repository must support Pages hosting, for example a public repository on GitHub Free.
 
 Vite derives its production base from `GITHUB_REPOSITORY`: a project repository gets `/<repository>/`, while a `username.github.io` repository gets `/`. Custom-domain hosting can use the `VITE_BASE_PATH=/` environment override in the build step.
 
