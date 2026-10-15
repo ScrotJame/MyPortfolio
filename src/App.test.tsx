@@ -67,4 +67,15 @@ describe('portfolio visitor flows', () => {
     expect(screen.getByText(/10\+ relational tables/)).toBeVisible()
     expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', `${import.meta.env.BASE_URL}CV_NguyenSyManhCuong.pdf`)
   })
+
+  it('triggers 1-revolution orbit animation when hovering over hero art', async () => {
+    const user = userEvent.setup()
+    const { container } = render(<App />)
+    const heroArt = container.querySelector('.hero-art') as HTMLElement
+    expect(heroArt).toBeInTheDocument()
+    expect(heroArt).not.toHaveClass('is-orbiting')
+
+    await user.hover(heroArt)
+    expect(heroArt).toHaveClass('is-orbiting')
+  })
 })
