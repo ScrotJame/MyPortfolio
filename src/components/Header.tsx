@@ -65,6 +65,26 @@ export function Header({
     }
   }, [drawerOpen])
 
+  const handleScrollTo = (id: string, e?: React.MouseEvent) => {
+    e?.preventDefault()
+    if (currentView !== 'home') {
+      onViewChange?.('home')
+      setTimeout(() => {
+        if (id === 'home') {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 50)
+    } else {
+      if (id === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <>
       {/* Left sliding sidebar drawer (no backdrop blur) */}
@@ -164,9 +184,9 @@ export function Header({
 
             <a
               className="brand-link"
-              href="#home"
+              href="home"
               aria-label={c.home}
-              onClick={() => onViewChange?.('home')}
+              onClick={(e) => handleScrollTo('home', e)}
             >
               <img
                 className="brand-icon"
@@ -187,7 +207,7 @@ export function Header({
             aria-label={locale === 'en' ? 'Main navigation' : 'Điều hướng chính'}
           >
             {(['about', 'expertise', 'projects', 'experience'] as const).map((id) => (
-              <a key={id} href={`#${id}`} onClick={() => onViewChange?.('home')}>
+              <a key={id} href={id} onClick={(e) => handleScrollTo(id, e)}>
                 {c.nav[id]}
               </a>
             ))}
@@ -226,7 +246,7 @@ export function Header({
                 <Sun size={18} aria-hidden="true" />
               )}
             </button>
-            <a className="header-contact" href="#contact" onClick={() => onViewChange?.('home')}>
+            <a className="header-contact" href="contact" onClick={(e) => handleScrollTo('contact', e)}>
               {c.nav.contact}
               <ArrowUpRight size={15} aria-hidden="true" />
             </a>
@@ -252,9 +272,9 @@ export function Header({
           {Object.entries(c.nav).map(([id, text]) => (
             <a
               key={id}
-              href={`#${id}`}
-              onClick={() => {
-                onViewChange?.('home')
+              href={id}
+              onClick={(e) => {
+                handleScrollTo(id, e)
                 setOpen(false)
               }}
             >

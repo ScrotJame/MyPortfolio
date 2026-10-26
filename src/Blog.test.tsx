@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import App from './App'
 
 beforeEach(() => {
+  window.history.pushState(null, '', '/')
   window.location.hash = ''
   localStorage.clear()
 })

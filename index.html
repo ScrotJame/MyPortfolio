@@ -10,6 +10,17 @@
     <meta property="og:description" content="Mobile, web, and AI-powered applications. Explore selected work and get in touch." />
     <meta property="og:type" content="website" />
     <title>Cuong Nguyen — Software Engineer</title>
+    <script>
+      (function(l) {
+        var params = new URLSearchParams(l.search);
+        var p = params.get('p');
+        if (p) {
+          var q = params.get('q');
+          var full = p + (q ? '?' + q.replace(/~and~/g, '&') : '') + l.hash;
+          window.history.replaceState(null, '', full);
+        }
+      }(window.location))
+    </script>
   </head>
   <body>
     <div id="root"></div>

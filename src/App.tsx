@@ -14,38 +14,64 @@ import { BlogPage } from './components/BlogPage'
 export default function App() {
   const preferences = usePreferences()
   const c = content[preferences.locale]
-  const [currentHash, setCurrentHash] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''))
   const [devMode, setDevMode] = useState<DevMode>('app')
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      setCurrentHash(window.location.hash)
+  // Extract clean relative path without any leading '#' or base URL
+  const getRelativePath = () => {
+    if (typeof window === 'undefined') return ''
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    let pathname = window.location.pathname
+    if (base && pathname.startsWith(base)) {
+      pathname = pathname.slice(base.length)
     }
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+    pathname = pathname.replace(/^\/+/, '')
+    const hash = window.location.hash.replace(/^#\/?/, '')
+    return pathname || hash
+  }
+
+  const [currentPath, setCurrentPath] = useState(getRelativePath)
+
+  useEffect(() => {
+    const handleNavigation = () => {
+      setCurrentPath(getRelativePath())
+    }
+    window.addEventListener('popstate', handleNavigation)
+    window.addEventListener('hashchange', handleNavigation)
+    return () => {
+      window.removeEventListener('popstate', handleNavigation)
+      window.removeEventListener('hashchange', handleNavigation)
+    }
   }, [])
 
-  const isBlog = currentHash.startsWith('#/blog') || currentHash === '#blog'
-  const activeSlug = currentHash.startsWith('#/blog/') ? currentHash.replace('#/blog/', '') : null
+  const isBlog = currentPath.startsWith('blog')
+  const activeSlug = currentPath.startsWith('blog/') ? currentPath.replace(/^blog\//, '') : null
 
   const handleViewChange = (view: 'home' | 'blog') => {
-    if (view === 'blog') {
-      window.location.hash = '#/blog'
-    } else {
-      window.location.hash = '#home'
+    const targetUrl = view === 'blog' ? `${import.meta.env.BASE_URL}blog` : import.meta.env.BASE_URL
+    window.history.pushState(null, '', targetUrl)
+    setCurrentPath(getRelativePath())
+    if (view === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const handleSelectPost = (slug: string | null) => {
-    if (slug) {
-      window.location.hash = `#/blog/${slug}`
-    } else {
-      window.location.hash = '#/blog'
-    }
+    const targetUrl = slug ? `${import.meta.env.BASE_URL}blog/${slug}` : `${import.meta.env.BASE_URL}blog`
+    window.history.pushState(null, '', targetUrl)
+    setCurrentPath(getRelativePath())
   }
 
   return <>
-    <a className="skip-link" href="#main-content">{c.skip}</a>
+    <a
+      className="skip-link"
+      href="main-content"
+      onClick={(e) => {
+        e.preventDefault()
+        document.getElementById('main-content')?.scrollIntoView()
+      }}
+    >
+      {c.skip}
+    </a>
     <Header
       c={c}
       {...preferences}
@@ -80,4 +106,3 @@ export default function App() {
     </main>
   </>
 }
-

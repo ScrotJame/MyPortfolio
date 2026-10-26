@@ -111,7 +111,17 @@ export function Hero({ c }: { c: Copy }) {
       <h1 id="hero-title">{c.hero[0]}{' '}<br /><span className="hero-middle">{c.hero[1]} <ArrowDownRight aria-hidden="true" /></span>{' '}<br /><span className="hero-accent">{c.hero[2]}</span></h1>
       <p className="hero-intro">{c.intro}</p>
       <div className="hero-actions flex flex-wrap items-center gap-3">
-        <a className="button button-primary" href="#projects">{c.viewWork}<ArrowUpRight size={19} aria-hidden="true" /></a>
+        <a
+          className="button button-primary"
+          href="projects"
+          onClick={(e) => {
+            e.preventDefault()
+            document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        >
+          {c.viewWork}
+          <ArrowUpRight size={19} aria-hidden="true" />
+        </a>
         <a
           className="button button-outline"
           href={`${import.meta.env.BASE_URL}cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`}
@@ -166,6 +176,16 @@ export function Hero({ c }: { c: Copy }) {
       <span className="art-cross cross-one">+</span><span className="art-cross cross-two">+</span>
       <span className="coordinate">21.0285° N · 105.8542° E</span>
     </div>
-    <a className="scroll-note" href="#about"><span className="scroll-circle"><ArrowDown size={16} aria-hidden="true" /></span>{c.scroll}</a>
+    <a
+      className="scroll-note"
+      href="about"
+      onClick={(e) => {
+        e.preventDefault()
+        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
+      }}
+    >
+      <span className="scroll-circle"><ArrowDown size={16} aria-hidden="true" /></span>
+      {c.scroll}
+    </a>
   </section>
 }
