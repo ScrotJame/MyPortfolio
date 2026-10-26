@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { content } from './data/content'
 import { usePreferences } from './hooks/usePreferences'
 import { Header } from './components/Header'
+import { SubHeader, type DevMode } from './components/SubHeader'
 import { Hero } from './components/Hero'
 import { About } from './components/About'
 import { Expertise } from './components/Expertise'
@@ -14,6 +15,7 @@ export default function App() {
   const preferences = usePreferences()
   const c = content[preferences.locale]
   const [currentHash, setCurrentHash] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''))
+  const [devMode, setDevMode] = useState<DevMode>('app')
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -50,11 +52,18 @@ export default function App() {
       currentView={isBlog ? 'blog' : 'home'}
       onViewChange={handleViewChange}
     />
+    <SubHeader
+      locale={preferences.locale}
+      devMode={devMode}
+      onDevModeChange={setDevMode}
+      currentView={isBlog ? 'blog' : 'home'}
+    />
     <main id="main-content">
       {isBlog ? (
         <BlogPage
           locale={preferences.locale}
           activeSlug={activeSlug}
+          devMode={devMode}
           onSelectPost={handleSelectPost}
           onNavigateHome={() => handleViewChange('home')}
         />

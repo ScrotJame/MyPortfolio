@@ -6,20 +6,29 @@ import { getAllPosts, getPostBySlug } from '../utils/blog'
 interface BlogPageProps {
   locale: 'en' | 'vi'
   activeSlug: string | null
+  devMode?: 'app' | 'game'
   onSelectPost: (slug: string | null) => void
   onNavigateHome: () => void
 }
 
-export function BlogPage({ locale, activeSlug, onSelectPost, onNavigateHome }: BlogPageProps) {
-  const [filter, setFilter] = useState<'all' | 'app' | 'game'>('all')
+export function BlogPage({ locale, activeSlug, devMode, onSelectPost, onNavigateHome }: BlogPageProps) {
+  const [filterOverride, setFilterOverride] = useState<'all' | 'app' | 'game' | null>(null)
+  const [prevDevMode, setPrevDevMode] = useState(devMode)
+
+  if (prevDevMode !== devMode) {
+    setPrevDevMode(devMode)
+    setFilterOverride(null)
+  }
+
+  const activeFilter = filterOverride ?? devMode ?? 'all'
 
   const posts = useMemo(() => getAllPosts(), [])
   const activePost = activeSlug ? getPostBySlug(activeSlug) : null
 
   const filteredPosts = useMemo(() => {
-    if (filter === 'all') return posts
-    return posts.filter((p) => p.category === filter)
-  }, [posts, filter])
+    if (activeFilter === 'all') return posts
+    return posts.filter((p) => p.category === activeFilter)
+  }, [posts, activeFilter])
 
   const t = {
     all: locale === 'vi' ? 'Tất cả' : 'All',
@@ -126,23 +135,23 @@ export function BlogPage({ locale, activeSlug, onSelectPost, onNavigateHome }: B
         <div className="blog-filter-bar" role="group" aria-label="Lọc bài viết">
           <button
             type="button"
-            className={`blog-filter-btn ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
+            className={`blog-filter-btn ${activeFilter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterOverride('all')}
           >
             {t.all} ({posts.length})
           </button>
           <button
             type="button"
-            className={`blog-filter-btn ${filter === 'game' ? 'active' : ''}`}
-            onClick={() => setFilter('game')}
+            className={`blog-filter-btn ${activeFilter === 'game' ? 'active' : ''}`}
+            onClick={() => setFilterOverride('game')}
           >
             <Gamepad2 size={15} aria-hidden="true" />
             {t.games} ({posts.filter((p) => p.category === 'game').length})
           </button>
           <button
             type="button"
-            className={`blog-filter-btn ${filter === 'app' ? 'active' : ''}`}
-            onClick={() => setFilter('app')}
+            className={`blog-filter-btn ${activeFilter === 'app' ? 'active' : ''}`}
+            onClick={() => setFilterOverride('app')}
           >
             <Smartphone size={15} aria-hidden="true" />
             {t.apps} ({posts.filter((p) => p.category === 'app').length})
