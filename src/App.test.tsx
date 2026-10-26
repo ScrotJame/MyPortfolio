@@ -65,7 +65,7 @@ describe('portfolio visitor flows', () => {
     const projects = screen.getByRole('region', { name: 'Selected projects' })
     await user.click(within(projects).getAllByRole('button', { name: 'Explore project' })[0])
     expect(screen.getByText(/10\+ relational tables/)).toBeVisible()
-    expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', `${import.meta.env.BASE_URL}CV_NguyenSyManhCuong.pdf`)
+    expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', `${import.meta.env.BASE_URL}cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`)
   })
 
   it('triggers 1-revolution orbit animation when hovering over hero art', async () => {

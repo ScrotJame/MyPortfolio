@@ -112,7 +112,16 @@ export function Hero({ c }: { c: Copy }) {
       <p className="hero-intro">{c.intro}</p>
       <div className="hero-actions flex flex-wrap items-center gap-3">
         <a className="button button-primary" href="#projects">{c.viewWork}<ArrowUpRight size={19} aria-hidden="true" /></a>
-        <a className="button button-outline" href={`${import.meta.env.BASE_URL}CV_NguyenSyManhCuong.pdf`} download>{c.download}<Download size={17} aria-hidden="true" /></a>
+        <a
+          className="button button-outline"
+          href={`${import.meta.env.BASE_URL}cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`}
+          download="Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {c.download}
+          <Download size={17} aria-hidden="true" />
+        </a>
       </div>
       <div className="hero-socials">
         <span className="short-rule" aria-hidden="true" />

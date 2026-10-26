@@ -28,7 +28,7 @@ npm run preview
 - `public/images/avatar.jpg`: owner-provided portrait, displayed in the hero with a monogram fallback if it cannot load.
 - `public/icons_svg/logo.svg`: owner-provided logo, used in the header, footer, and favicon.
 - `src/components/ProjectCover.tsx`: original concept illustrations, explicitly labeled as illustrations. Replace with genuine product screenshots when available.
-- `public/CV_NguyenSyManhCuong.pdf`: downloadable CV supplied by the owner.
+- `public/cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`: downloadable CV supplied by the owner.
 
 English is the default. Language and theme are stored in browser localStorage; switching remains usable if storage is blocked. All navigation uses section anchors, so there is no client-router fallback requirement. Project categories and expanded details stay intact when switching languages. Site copy is based on the supplied CV; metrics preserve their benchmark context.
 
