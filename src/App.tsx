@@ -10,6 +10,7 @@ import { Projects } from './components/Projects'
 import { Experience } from './components/Experience'
 import { Contact } from './components/Contact'
 import { BlogPage } from './components/BlogPage'
+import { GameDevPage } from './components/GameDevPage'
 
 export default function App() {
   const preferences = usePreferences()
@@ -92,6 +93,12 @@ export default function App() {
           devMode={devMode}
           onSelectPost={handleSelectPost}
           onNavigateHome={() => handleViewChange('home')}
+        />
+      ) : devMode === 'game' ? (
+        <GameDevPage
+          locale={preferences.locale}
+          onSwitchToAppDev={() => setDevMode('app')}
+          onNavigateBlog={() => handleViewChange('blog')}
         />
       ) : (
         <>

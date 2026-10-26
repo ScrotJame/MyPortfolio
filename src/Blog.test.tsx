@@ -76,4 +76,29 @@ describe('blog visitor flows', () => {
     await user.click(portfolioItemBtn)
     expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
   })
+
+  it('displays under construction page when Game Dev mode is selected on portfolio', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    // Initially in portfolio view
+    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
+
+    // Switch to Game Dev mode in subheader
+    const gameDevBtn = screen.getByRole('button', { name: 'Game Dev' })
+    await user.click(gameDevBtn)
+
+    // Should display Under Construction heading and action button
+    expect(
+      screen.getByRole('heading', { name: /Under Construction|Trang đang được xây dựng/ }),
+    ).toBeVisible()
+    expect(
+      screen.getByRole('button', { name: /Switch to App Dev|Xem dự án App Dev/ }),
+    ).toBeVisible()
+
+    // Switch back to App Dev via the button on the page
+    const switchAppBtn = screen.getByRole('button', { name: /Switch to App Dev|Xem dự án App Dev/ })
+    await user.click(switchAppBtn)
+    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
+  })
 })

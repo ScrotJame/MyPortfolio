@@ -405,7 +405,60 @@ p, h1, h2, h3, h4 { margin: 0; }
 .blog-article-content hr { border: 0; border-top: 1px solid var(--border); margin: 32px 0; }
 .blog-article-content strong { color: var(--text); font-weight: 750; }
 .blog-article-content code { background: var(--soft); padding: 2px 6px; border-radius: 4px; font-size: 12px; border: 1px solid var(--border); }
-.blog-empty-state { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 13px; }
+/* Game Dev Under Construction Page */
+.construction-section {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 50px 100px;
+}
+.construction-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 640px;
+  margin-inline: auto;
+}
+.construction-illustration-wrapper {
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.construction-illustration {
+  width: min(380px, 80vw);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.08));
+  transition: transform 0.4s ease;
+}
+.construction-illustration:hover {
+  transform: scale(1.03);
+}
+.construction-title {
+  font-size: clamp(30px, 4.2vw, 46px);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.25;
+  margin-top: 12px;
+}
+.construction-desc {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 520px;
+  margin-top: 14px;
+  margin-bottom: 28px;
+}
+.construction-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-copy { animation: fade-up .6s ease both; }
