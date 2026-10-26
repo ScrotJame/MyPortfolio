@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ArrowUpRight, Smartphone } from 'lucide-react'
 import { content } from './data/content'
 import { usePreferences } from './hooks/usePreferences'
 import { Header } from './components/Header'
@@ -10,7 +11,13 @@ import { Projects } from './components/Projects'
 import { Experience } from './components/Experience'
 import { Contact } from './components/Contact'
 import { BlogPage } from './components/BlogPage'
+import { UnderConstruction } from './components/UnderConstruction'
 import { GameDevPage } from './components/GameDevPage'
+
+// 🔌 PLUG & PLAY CHO GAME DEV:
+// false = Đang cắm module UnderConstruction (had_build.svg)
+// true  = Tháo UnderConstruction, cắm module GameDevPage (UI thực tế)
+export const IS_GAME_DEV_READY = false
 
 export default function App() {
   const preferences = usePreferences()
@@ -95,11 +102,33 @@ export default function App() {
           onNavigateHome={() => handleViewChange('home')}
         />
       ) : devMode === 'game' ? (
-        <GameDevPage
-          locale={preferences.locale}
-          onSwitchToAppDev={() => setDevMode('app')}
-          onNavigateBlog={() => handleViewChange('blog')}
-        />
+        /* 🔌 PLUG & PLAY CHO GAME DEV:
+         * - Khi chưa xong: Cắm module <UnderConstruction /> (dùng had_build.svg)
+         * - Khi xây xong: Cắm module <GameDevPage />
+         */
+        !IS_GAME_DEV_READY ? (
+          <UnderConstruction
+            eyebrow={preferences.locale === 'vi' ? 'KHÔNG GIAN GAME DEVELOPMENT' : 'GAME DEVELOPMENT SPACE'}
+            title={preferences.locale === 'vi' ? 'Trang đang được xây dựng' : 'Under Construction'}
+            desc={
+              preferences.locale === 'vi'
+                ? 'Góc chia sẻ các dự án game, sản phẩm Unity và các thử nghiệm đồ họa đang trong quá trình phát triển và hoàn thiện. Hãy quay lại sớm nhé!'
+                : 'The showcase for game projects, Unity prototypes, and graphics experiments is currently in the works. Please check back soon!'
+            }
+            primaryAction={{
+              label: preferences.locale === 'vi' ? 'Xem dự án App Dev' : 'Switch to App Dev',
+              onClick: () => setDevMode('app'),
+              icon: Smartphone,
+            }}
+            secondaryAction={{
+              label: preferences.locale === 'vi' ? 'Đọc review Game trên Blog' : 'Read Game Reviews on Blog',
+              onClick: () => handleViewChange('blog'),
+              icon: ArrowUpRight,
+            }}
+          />
+        ) : (
+          <GameDevPage locale={preferences.locale} />
+        )
       ) : (
         <>
           <Hero c={c} />
