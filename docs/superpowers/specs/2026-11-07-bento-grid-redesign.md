@@ -131,3 +131,4 @@ Giao diện được bọc trong khung trung tâm `max-w-7xl mx-auto px-4 py-6 m
   - Kiểm tra dictionary ngôn ngữ EN/VI đầy đủ các key cho cả 2 track.
   - Kiểm tra mở/đóng modal chi tiết dự án.
 - **Visual verification:** Kiểm tra trên các độ phân giải màn hình Desktop (1440px, 1280px), Tablet (768px), Mobile (375px).
+
