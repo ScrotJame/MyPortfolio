@@ -8,6 +8,6 @@ coverage/
 playwright-report/
 test-results/
 *.log
-docs/
+docs/*
 !docs/superpowers/
 
