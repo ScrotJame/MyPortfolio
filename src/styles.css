@@ -456,6 +456,21 @@ p, h1, h2, h3, h4 { margin: 0; }
   justify-content: center;
 }
 
+/* Bento Grid Utilities */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+.dot-matrix-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero-copy { animation: fade-up .6s ease both; }
   .hero-art { animation: fade-up .8s .1s ease both; }
