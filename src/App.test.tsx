@@ -1,81 +1,105 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 
-beforeEach(() => { localStorage.clear(); document.documentElement.removeAttribute('data-theme') })
+beforeEach(() => {
+  localStorage.clear()
+  window.history.pushState(null, '', '/')
+  window.location.hash = ''
+})
 
-describe('portfolio visitor flows', () => {
-  it('switches every section to Vietnamese and restores that choice after a reload', async () => {
+describe('portfolio visitor flows with Bento Grid UI', () => {
+  it('switches language between English and Vietnamese', async () => {
     const user = userEvent.setup()
     const { unmount } = render(<App />)
-    await user.click(screen.getByRole('button', { name: 'Tiếng Việt' }))
-    expect(screen.getByRole('heading', { name: /Xây dựng trải nghiệm/ })).toBeVisible()
-    expect(screen.getByRole('heading', { name: 'Kinh nghiệm làm việc' })).toBeVisible()
-    expect(document.documentElement.lang).toBe('vi')
+
+    // Initial English
+    expect(screen.getByText("Hello! I'm Cuong")).toBeInTheDocument()
+    expect(screen.getByText(/Latest Projects/i)).toBeInTheDocument()
+
+    // Switch to Vietnamese
+    const langBtn = screen.getByTitle(/Chuyển sang Tiếng Anh|Switch to Vietnamese/i)
+    await user.click(langBtn)
+
+    expect(screen.getByText('Xin chào! Mình là Cường')).toBeInTheDocument()
+    expect(screen.getByText(/Dự án tiêu biểu/i)).toBeInTheDocument()
+
+    // Reload test
     unmount()
     render(<App />)
-    expect(screen.getByRole('heading', { name: /Xây dựng trải nghiệm/ })).toBeVisible()
+    expect(screen.getByText('Xin chào! Mình là Cường')).toBeInTheDocument()
   })
 
-  it('filters projects and keeps the selected category when language changes', async () => {
+  it('switches between App Dev and Game Dev tracks using the Vinyl Switcher', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const projects = screen.getByRole('region', { name: 'Selected projects' })
-    await user.click(within(projects).getByRole('button', { name: 'Mobile' }))
-    expect(within(projects).getByRole('heading', { name: 'Dungeonary' })).toBeVisible()
-    expect(within(projects).getByRole('heading', { name: 'Rentify' })).toBeVisible()
-    expect(within(projects).queryByRole('heading', { name: 'Car X EV' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Tiếng Việt' }))
-    expect(within(screen.getByRole('region', { name: 'Dự án tiêu biểu' })).getByRole('button', { name: 'Di động' })).toHaveAttribute('aria-pressed', 'true')
-    expect(screen.getByRole('heading', { name: /Kỹ thuật phần mềm/ })).toBeVisible()
-    expect(screen.getAllByRole('link', { name: 'Cường Nguyễn — Trang chủ' })).toHaveLength(2)
+
+    // Initially in App Dev mode
+    expect(screen.getByText(/Software Engineer/i)).toBeInTheDocument()
+    expect(screen.getByText('Flutter')).toBeInTheDocument()
+
+    // Click vinyl disc to switch to Game Dev
+    const vinylBtn = screen.getByRole('button', { name: /switch track/i })
+    await user.click(vinylBtn)
+
+    // Should switch to Game Dev mode
+    expect(screen.getByText('GAME')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByText('Unity')).toBeInTheDocument()
+    })
   })
 
-  it('remembers the dark theme without resetting language', async () => {
+  it('opens and closes project detail modal', async () => {
     const user = userEvent.setup()
-    const { unmount } = render(<App />)
-    await user.click(screen.getByRole('button', { name: 'Switch to dark theme' }))
-    expect(document.documentElement.dataset.theme).toBe('dark')
-    await user.click(screen.getByRole('button', { name: 'Tiếng Việt' }))
-    expect(document.documentElement.dataset.theme).toBe('dark')
-    unmount()
     render(<App />)
-    expect(document.documentElement.dataset.theme).toBe('dark')
+
+    // Click on a project
+    const projectItem = screen.getByText(/EV Fleet Dispatch Dashboard/i)
+    await user.click(projectItem)
+
+    // Modal opens
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /EV Fleet Dispatch Dashboard/i })).toBeInTheDocument()
+
+    // Close via close button
+    const closeBtn = screen.getByRole('button', { name: /close/i })
+    await user.click(closeBtn)
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
   })
 
-  it('keeps language switching usable when browser storage is unavailable', async () => {
+  it('navigates to blog and returns to home', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    // Click blog button in top bar
+    const blogBtn = screen.getAllByRole('button', { name: /blog/i })[0]
+    await user.click(blogBtn)
+
+    // Should render Blog page
+    expect(screen.getByRole('heading', { name: /App & Game Reviews/i })).toBeInTheDocument()
+
+    // Return to home via home link or logo
+    const homeBtn = screen.getByRole('link', { name: /Cuong Nguyen — Home|Cường Nguyễn — Trang chủ/i })
+    await user.click(homeBtn)
+
+    expect(screen.getByText(/Digital Pass/i)).toBeInTheDocument()
+  })
+
+  it('handles blocked localStorage gracefully', async () => {
     const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('Blocked') })
     const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Blocked') })
     try {
       render(<App />)
-      await userEvent.setup().click(screen.getByRole('button', { name: 'Tiếng Việt' }))
-      expect(screen.getByRole('heading', { name: /Xây dựng trải nghiệm/ })).toBeVisible()
-    } finally { get.mockRestore(); set.mockRestore() }
-  })
-
-  it('opens and closes mobile navigation and expands real project contributions', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-    const menu = screen.getByRole('button', { name: 'Open navigation' })
-    await user.click(menu)
-    expect(screen.getByRole('button', { name: 'Close navigation' })).toHaveAttribute('aria-expanded', 'true')
-    await user.keyboard('{Escape}')
-    expect(menu).toHaveAttribute('aria-expanded', 'false')
-    const projects = screen.getByRole('region', { name: 'Selected projects' })
-    await user.click(within(projects).getAllByRole('button', { name: 'Explore project' })[0])
-    expect(screen.getByText(/10\+ relational tables/)).toBeVisible()
-    expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', `${import.meta.env.BASE_URL}cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`)
-  })
-
-  it('triggers 1-revolution orbit animation when hovering over hero art', async () => {
-    const user = userEvent.setup()
-    const { container } = render(<App />)
-    const heroArt = container.querySelector('.hero-art') as HTMLElement
-    expect(heroArt).toBeInTheDocument()
-    expect(heroArt).not.toHaveClass('is-orbiting')
-
-    await user.hover(heroArt)
-    expect(heroArt).toHaveClass('is-orbiting')
+      const langBtn = screen.getByTitle(/Chuyển sang Tiếng Anh|Switch to Vietnamese/i)
+      await userEvent.setup().click(langBtn)
+      expect(screen.getByText('Xin chào! Mình là Cường')).toBeInTheDocument()
+    } finally {
+      get.mockRestore()
+      set.mockRestore()
+    }
   })
 })

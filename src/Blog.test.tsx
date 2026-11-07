@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 import App from './App'
@@ -10,25 +10,21 @@ beforeEach(() => {
 })
 
 describe('blog visitor flows', () => {
-  it('navigates to blog via left drawer, filters by dev mode, opens post and returns', async () => {
+  it('navigates to blog, filters by dev mode, opens post and returns', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    // Initially in portfolio view
-    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
+    // Initially in bento portfolio view
+    expect(screen.getByText(/hello!/i)).toBeInTheDocument()
 
-    // 1. Open left drawer by clicking the list menu icon at left corner
-    const leftDrawerBtn = screen.getByRole('button', { name: /Open navigation menu|Mở menu danh mục/ })
-    await user.click(leftDrawerBtn)
-
-    // 2. Click "Blog" option inside drawer
-    const blogItemBtn = screen.getByRole('button', { name: /Blog/ })
-    await user.click(blogItemBtn)
+    // 1. Click "Blog" button from top bar
+    const blogBtn = screen.getAllByRole('button', { name: /blog/i })[0]
+    await user.click(blogBtn)
 
     // Should display Blog header
     expect(screen.getByRole('heading', { name: /App & Game Reviews/ })).toBeVisible()
 
-    // 3. Test App Dev / Game Dev switcher in subheader
+    // 2. Test App Dev / Game Dev switcher in subheader
     // Switch to Game Dev mode
     const gameDevBtn = screen.getByRole('button', { name: 'Game Dev' })
     await user.click(gameDevBtn)
@@ -51,7 +47,7 @@ describe('blog visitor flows', () => {
     ).toBeVisible()
     expect(screen.getByText('9.0/10')).toBeVisible()
 
-    // 4. Click to read the Cursor review post
+    // 3. Click to read the Cursor review post
     await user.click(screen.getByRole('button', { name: /Trải nghiệm Cursor/ }))
 
     // Verify detail view content and Markdown rendering
@@ -69,36 +65,9 @@ describe('blog visitor flows', () => {
     await user.click(backBtn)
     expect(screen.getByRole('heading', { name: /App & Game Reviews/ })).toBeVisible()
 
-    // 5. Open left drawer and switch back to Portfolio
-    await user.click(leftDrawerBtn)
-    const drawer = screen.getByRole('complementary', { name: /Spaces|Không gian/ })
-    const portfolioItemBtn = within(drawer).getByRole('button', { name: /Portfolio/ })
-    await user.click(portfolioItemBtn)
-    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
-  })
-
-  it('displays under construction page when Game Dev mode is selected on portfolio', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-
-    // Initially in portfolio view
-    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
-
-    // Switch to Game Dev mode in subheader
-    const gameDevBtn = screen.getByRole('button', { name: 'Game Dev' })
-    await user.click(gameDevBtn)
-
-    // Should display Under Construction heading and action button
-    expect(
-      screen.getByRole('heading', { name: /Under Construction|Trang đang được xây dựng/ }),
-    ).toBeVisible()
-    expect(
-      screen.getByRole('button', { name: /Switch to App Dev|Xem dự án App Dev/ }),
-    ).toBeVisible()
-
-    // Switch back to App Dev via the button on the page
-    const switchAppBtn = screen.getByRole('button', { name: /Switch to App Dev|Xem dự án App Dev/ })
-    await user.click(switchAppBtn)
-    expect(screen.getByRole('heading', { name: /Building mobile/ })).toBeVisible()
+    // 4. Return to Bento Portfolio
+    const homeBtn = screen.getByRole('link', { name: /Cuong Nguyen — Home|Cường Nguyễn — Trang chủ/i })
+    await user.click(homeBtn)
+    expect(screen.getByText(/Digital Pass/i)).toBeInTheDocument()
   })
 })
