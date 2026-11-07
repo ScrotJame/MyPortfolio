@@ -161,7 +161,7 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
       {/* Center 3D Digital Pass Container */}
       <div className="relative flex-1 flex items-center justify-center my-4 min-h-[320px]">
         {splineSceneUrl && !splineFailed ? (
-          <Suspense fallback={<TwoSidedDigitalPass rotate={rotate} isHovered={isHovered} isApp={isApp} locale={locale} />}>
+          <Suspense fallback={<TwoSidedDigitalPass rotate={rotate} isHovered={isHovered} isApp={isApp} />}>
             <div className="w-full h-full absolute inset-0">
               <Spline
                 scene={splineSceneUrl}
@@ -174,21 +174,18 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
             rotate={rotate}
             isHovered={isHovered}
             isApp={isApp}
-            locale={locale}
           />
         )}
       </div>
 
-      {/* Bottom Status & Instructions */}
+      {/* Bottom Status & Clean Tagline (removed 'rê chuột để xoay') */}
       <div className="flex flex-col items-center text-center z-10 pt-2 border-t border-white/[0.06]">
         <h2 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">
           <span>Digital Pass</span>
           <Sparkles size={14} className={isApp ? 'text-emerald-400' : 'text-purple-400'} />
         </h2>
-        <p className="text-[11px] text-white/45 font-medium mt-0.5">
-          {locale === 'en'
-            ? 'Hover & move mouse to rotate freely in 3D · Holds any angle'
-            : 'Rê chuột để xoay 3D tự do mọi góc nhìn · Giữ nguyên tư thế'}
+        <p className="text-[11px] text-white/40 font-mono mt-0.5">
+          {locale === 'en' ? 'Interactive 3D Identity' : 'Nhận diện 3D tương tác'}
         </p>
       </div>
     </article>
@@ -199,14 +196,12 @@ interface TwoSidedDigitalPassProps {
   rotate: { x: number; y: number }
   isHovered: boolean
   isApp: boolean
-  locale: 'en' | 'vi'
 }
 
 function TwoSidedDigitalPass({
   rotate,
   isHovered,
-  isApp,
-  locale
+  isApp
 }: TwoSidedDigitalPassProps) {
   const avatarSrc = `${import.meta.env.BASE_URL}images/avatar.jpg`
 
@@ -239,13 +234,13 @@ function TwoSidedDigitalPass({
       />
 
       {/* =========================================================================
-          FACE 1: FRONT (MẶT TRƯỚC - AVATAR & PERSONAL IDENTIFIER)
+          FACE 1: FRONT (MẶT TRƯỚC - AVATAR CHIẾM 2/3 PHÍA TRÊN & ĐỊNH DANH)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${
+        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${
           isApp
-            ? 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#091f17]/95 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-            : 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#1e0e2e]/95 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+            ? 'bg-neutral-950 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+            : 'bg-neutral-950 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
         }`}
         style={{
           backfaceVisibility: 'hidden',
@@ -255,7 +250,7 @@ function TwoSidedDigitalPass({
       >
         {/* Holographic Specular Sheen Reflection moving with rotation */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300"
+          className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300 z-20"
           style={{
             background: isHovered
               ? `linear-gradient(${105 + rotate.y * 1.5}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
@@ -263,61 +258,61 @@ function TwoSidedDigitalPass({
           }}
         />
 
-        {/* Top Header of Face 1 */}
-        <div className="flex items-center justify-between z-10">
-          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/[0.08] border border-white/10 text-[9px] font-mono text-white/80">
-            <span className={`w-1.5 h-1.5 rounded-full ${isApp ? 'bg-emerald-400' : 'bg-purple-400'} animate-ping`} />
-            <span>DEV PASS</span>
-          </div>
-          <span className="text-[9px] font-mono tracking-widest text-white/50 uppercase">
-            FRONT // 01
-          </span>
-        </div>
+        {/* Top 2/3: Expansive Avatar Photo Section */}
+        <div className="relative w-full h-[66%] overflow-hidden bg-neutral-900">
+          <img
+            src={avatarSrc}
+            alt="Nguyen Sy Manh Cuong"
+            className="w-full h-full object-cover object-top filter contrast-[1.05]"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
+          />
 
-        {/* Center of Face 1: Large Avatar with Holographic Frame */}
-        <div className="flex flex-col items-center justify-center my-auto z-10">
+          {/* Top Header Tags over photo */}
+          <div className="absolute top-3 inset-x-3 flex items-center justify-between z-10">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 border border-white/20 backdrop-blur-md text-[9px] font-mono text-white/90 shadow-sm">
+              <span className={`w-1.5 h-1.5 rounded-full ${isApp ? 'bg-emerald-400' : 'bg-purple-400'} animate-ping`} />
+              <span>PASS // 01</span>
+            </div>
+            <span className="text-[9px] font-mono font-bold tracking-wider text-white/80 bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-sm border border-white/10 uppercase">
+              DEV PASS
+            </span>
+          </div>
+
+          {/* Bottom gradient fade into lower info section */}
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-transparent pointer-events-none" />
+
+          {/* Verified Badge on bottom-right of photo */}
           <div
-            className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl p-1 border-2 transition-all duration-500 shadow-xl ${
-              isApp
-                ? 'border-emerald-400/50 shadow-[0_0_30px_rgba(16,185,129,0.35)]'
-                : 'border-purple-400/50 shadow-[0_0_30px_rgba(168,85,247,0.35)]'
+            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${
+              isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
             }`}
           >
-            <img
-              src={avatarSrc}
-              alt="Nguyen Sy Manh Cuong"
-              className="w-full h-full object-cover rounded-xl"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none'
-              }}
-            />
-            {/* Verified badge icon on avatar */}
-            <div
-              className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md ${
-                isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
-              }`}
-            >
-              <CheckCircle size={14} strokeWidth={2.5} />
-            </div>
-          </div>
-
-          <div className="mt-3 text-center">
-            <h3 className="text-sm sm:text-base font-black tracking-wider text-white uppercase">
-              CƯỜNG NGUYỄN
-            </h3>
-            <p className="text-[11px] font-mono text-white/60">
-              @cuongnsm
-            </p>
+            <CheckCircle size={14} strokeWidth={2.5} />
           </div>
         </div>
 
-        {/* Bottom of Face 1: Hint */}
-        <div className="z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/50">
-          <span className="flex items-center gap-1 text-emerald-400">
-            <RotateCw size={10} />
-            {locale === 'en' ? 'Hover to rotate 3D' : 'Rê chuột xoay 3D'}
-          </span>
-          <span>#HANOI-VN</span>
+        {/* Bottom 1/3: Identity & Role Specs */}
+        <div className="h-[34%] p-3.5 sm:p-4 flex flex-col justify-between bg-neutral-950 relative z-10">
+          <div>
+            <h3 className="text-sm sm:text-base font-black tracking-wider text-white uppercase leading-tight">
+              CƯỜNG NGUYỄN
+            </h3>
+            <p className="text-[11px] font-mono text-white/60 mt-0.5 flex items-center gap-1.5">
+              <span className={isApp ? 'text-emerald-400 font-semibold' : 'text-purple-400 font-semibold'}>
+                @cuongnsm
+              </span>
+              <span className="text-white/30">·</span>
+              <span className="text-white/50">{isApp ? 'Mobile & AI' : 'Game & 3D'}</span>
+            </p>
+          </div>
+
+          {/* Bottom Metas (Clean, no 'rê chuột để xoay') */}
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/50">
+            <span className="font-semibold text-emerald-400/90 tracking-wider">#VERIFIED</span>
+            <span className="text-white/40">#HANOI-VN</span>
+          </div>
         </div>
       </div>
 
