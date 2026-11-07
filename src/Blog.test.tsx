@@ -1,73 +1,47 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it } from 'vitest'
-import App from './App'
+import { describe, it, expect, vi } from 'vitest'
+import { BlogVaultLayout } from './components/blog/BlogVaultLayout'
 
-beforeEach(() => {
-  window.history.pushState(null, '', '/')
-  window.location.hash = ''
-  localStorage.clear()
-})
-
-describe('blog visitor flows', () => {
-  it('navigates to blog, filters by dev mode, opens post and returns', async () => {
+describe('BlogVaultLayout', () => {
+  it('renders library header, shelf filters, card deck, and navigates to reader view', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    const handleSelectPost = vi.fn()
+    const handleNavigateHome = vi.fn()
 
-    // Initially in bento portfolio view
-    expect(screen.getByText(/hello!/i)).toBeInTheDocument()
+    const { rerender } = render(
+      <BlogVaultLayout
+        locale="vi"
+        activeSlug={null}
+        onLocaleChange={vi.fn()}
+        onSelectPost={handleSelectPost}
+        onNavigateHome={handleNavigateHome}
+      />
+    )
 
-    // 1. Click "Blog" button from top bar
-    const blogBtn = screen.getAllByRole('button', { name: /blog/i })[0]
-    await user.click(blogBtn)
+    // Verify Header and Shelf filters
+    expect(screen.getByText(/digital archives/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /tất cả kệ/i })).toBeInTheDocument()
 
-    // Should display Blog header
-    expect(screen.getByRole('heading', { name: /App & Game Reviews/ })).toBeVisible()
+    // Verify "Xem chi tiết" buttons on cards
+    const viewButtons = screen.getAllByRole('button', { name: /xem chi tiết/i })
+    expect(viewButtons.length).toBeGreaterThan(0)
 
-    // 2. Test App Dev / Game Dev switcher in subheader
-    // Switch to Game Dev mode
-    const gameDevBtn = screen.getByRole('button', { name: 'Game Dev' })
-    await user.click(gameDevBtn)
+    // Click "Xem chi tiết" on the first card
+    await user.click(viewButtons[0])
+    expect(handleSelectPost).toHaveBeenCalled()
 
-    expect(
-      screen.getByRole('button', {
-        name: 'Trải nghiệm Black Myth: Wukong — Tuyệt phẩm hành động đậm chất Tây Du Ký',
-      }),
-    ).toBeVisible()
-    expect(screen.getByText('9.2/10')).toBeVisible()
+    // Rerender with active post slug to simulate reader mode
+    rerender(
+      <BlogVaultLayout
+        locale="vi"
+        activeSlug="review-cursor"
+        onLocaleChange={vi.fn()}
+        onSelectPost={handleSelectPost}
+        onNavigateHome={handleNavigateHome}
+      />
+    )
 
-    // Switch to App Dev mode
-    const appDevBtn = screen.getByRole('button', { name: 'App Dev' })
-    await user.click(appDevBtn)
-
-    expect(
-      screen.getByRole('button', {
-        name: /Trải nghiệm Cursor/,
-      }),
-    ).toBeVisible()
-    expect(screen.getByText('9.0/10')).toBeVisible()
-
-    // 3. Click to read the Cursor review post
-    await user.click(screen.getByRole('button', { name: /Trải nghiệm Cursor/ }))
-
-    // Verify detail view content and Markdown rendering
-    expect(
-      screen.getByRole('heading', {
-        level: 1,
-        name: /Trải nghiệm Cursor/,
-      }),
-    ).toBeVisible()
-    expect(screen.getByText(/Những điểm sáng đắt giá/)).toBeVisible()
-    expect(screen.getAllByText(/Composer/).length).toBeGreaterThan(0)
-
-    // Click back to blog list
-    const backBtn = screen.getByRole('button', { name: /Back to all posts/ })
-    await user.click(backBtn)
-    expect(screen.getByRole('heading', { name: /App & Game Reviews/ })).toBeVisible()
-
-    // 4. Return to Bento Portfolio
-    const homeBtn = screen.getByRole('link', { name: /Cuong Nguyen — Home|Cường Nguyễn — Trang chủ/i })
-    await user.click(homeBtn)
-    expect(screen.getByText(/Digital Pass/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /quay lại thư viện/i })).toBeInTheDocument()
   })
 })

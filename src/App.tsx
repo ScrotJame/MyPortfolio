@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { usePreferences } from './hooks/usePreferences'
 import { BentoLayout } from './components/bento/BentoLayout'
-import { BlogPage } from './components/BlogPage'
-import { Header } from './components/Header'
-import { SubHeader } from './components/SubHeader'
+import { BlogVaultLayout } from './components/blog/BlogVaultLayout'
 import { content } from './data/content'
 import type { BentoTrack } from './data/bentoData'
 
@@ -71,29 +69,13 @@ export default function App() {
       </a>
 
       {isBlog ? (
-        <>
-          <Header
-            c={c}
-            {...preferences}
-            currentView="blog"
-            onViewChange={handleViewChange}
-          />
-          <SubHeader
-            locale={preferences.locale}
-            devMode={devMode}
-            onDevModeChange={setDevMode}
-            currentView="blog"
-          />
-          <main id="main-content">
-            <BlogPage
-              locale={preferences.locale}
-              activeSlug={activeSlug}
-              devMode={devMode}
-              onSelectPost={handleSelectPost}
-              onNavigateHome={() => handleViewChange('home')}
-            />
-          </main>
-        </>
+        <BlogVaultLayout
+          locale={preferences.locale}
+          activeSlug={activeSlug}
+          onLocaleChange={preferences.setLocale}
+          onSelectPost={handleSelectPost}
+          onNavigateHome={() => handleViewChange('home')}
+        />
       ) : (
         <main id="main-content">
           <BentoLayout
