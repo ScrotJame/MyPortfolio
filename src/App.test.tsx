@@ -79,10 +79,10 @@ describe('portfolio visitor flows with Bento Grid UI', () => {
     const blogBtn = screen.getAllByRole('button', { name: /blog/i })[0]
     await user.click(blogBtn)
 
-    // Should render Bento Digital Archives page
+    // Should render Bento Digital Archives page with empty/coming-soon state
     expect(screen.getByText(/DIGITAL ARCHIVES/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /All Archives|Tất cả Kệ/i })).toBeInTheDocument()
-    expect(screen.getAllByRole('button', { name: /View Details|Xem chi tiết/i }).length).toBeGreaterThan(0)
+    expect(screen.getByText(/Archives Coming Soon|Kho lưu trữ đang chuẩn bị ra mắt/i)).toBeInTheDocument()
 
     // Return to home via "Back to Home" button
     const homeBtn = screen.getByRole('button', { name: /Back to Home|Về Portfolio/i })

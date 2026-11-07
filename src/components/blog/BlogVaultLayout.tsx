@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { ArrowLeft, Globe2 } from 'lucide-react'
+import { ArrowLeft, BookOpen, Globe2 } from 'lucide-react'
 import { getAllPosts, getPostBySlug } from '../../utils/blog'
 import { BlogShelfFilter } from './BlogShelfFilter'
 import { BlogCard3D } from './BlogCard3D'
@@ -113,7 +113,21 @@ export function BlogVaultLayout({
               />
 
               {/* Card Deck Gallery Grid */}
-              {filteredPosts.length === 0 ? (
+              {posts.length === 0 ? (
+                <div className="py-20 sm:py-28 flex flex-col items-center justify-center text-center px-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-emerald-400 mb-4 shadow-inner">
+                    <BookOpen size={24} />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-white mb-2">
+                    {isVi ? 'Kho lưu trữ đang chuẩn bị ra mắt' : 'Archives Coming Soon'}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-white/50 max-w-md leading-relaxed font-normal">
+                    {isVi
+                      ? 'Các bài viết phân tích chuyên sâu về ứng dụng và game sẽ sớm được phát hành tại đây. Hãy đón đọc nhé!'
+                      : 'In-depth reflections, app reviews, and game analysis will be published here soon. Stay tuned!'}
+                  </p>
+                </div>
+              ) : filteredPosts.length === 0 ? (
                 <div className="py-20 text-center text-white/40 font-mono text-sm">
                   {isVi ? 'Không tìm thấy thẻ bài hồ sơ phù hợp.' : 'No archive cards found.'}
                 </div>

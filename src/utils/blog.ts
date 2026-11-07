@@ -9,7 +9,7 @@ export interface BlogPost {
   content: string
 }
 
-function parseFrontmatter(raw: string): { frontmatter: Record<string, string>; content: string } {
+export function parseFrontmatter(raw: string): { frontmatter: Record<string, string>; content: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/)
   if (!match) {
     return { frontmatter: {}, content: raw.trim() }
