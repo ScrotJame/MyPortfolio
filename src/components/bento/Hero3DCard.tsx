@@ -191,26 +191,12 @@ export function Hero3DCard({
       <div className="flex items-center justify-between z-10 w-full">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[11px] font-mono text-white/70">
           <span
-            className={`w-2 h-2 rounded-full ${
-              isApp ? 'bg-cyan-400' : 'bg-purple-400'
-            } animate-pulse`}
+            className={`w-2 h-2 rounded-full ${isApp ? 'bg-cyan-400' : 'bg-purple-400'
+              } animate-pulse`}
           />
           <span>{isApp ? 'TRACK // 01 · APP ENGINE' : 'TRACK // 02 · GAME ENGINE'}</span>
         </div>
 
-        {/* Quick Flip/Reset Button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            toggleFlip()
-          }}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.07] hover:bg-white/[0.15] border border-white/15 text-[11px] font-semibold text-white/90 transition-all active:scale-95 cursor-pointer shadow-sm"
-          title={locale === 'en' ? 'Click to flip or reset 3D angle' : 'Bấm để lật hoặc cân bằng thẻ 3D'}
-        >
-          <RotateCw size={12} className={`transition-transform duration-500 ${isBackFacing ? 'rotate-180' : ''}`} />
-          <span>{isBackFacing ? (locale === 'en' ? 'Front' : 'Mặt trước') : (locale === 'en' ? 'Back' : 'Mặt sau')}</span>
-        </button>
       </div>
 
       {/* Center 3D Digital Pass Container */}
@@ -223,16 +209,6 @@ export function Hero3DCard({
         />
       </div>
 
-      {/* Bottom Status & Clean Tagline */}
-      <div className="flex flex-col items-center text-center z-10 pt-2 border-t border-white/[0.06]">
-        <h2 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">
-          <span>Digital Pass</span>
-          <Sparkles size={14} className={isApp ? 'text-emerald-400' : 'text-purple-400'} />
-        </h2>
-        <p className="text-[11px] text-white/40 font-mono mt-0.5">
-          {locale === 'en' ? 'Interactive 3D Identity' : 'Nhận diện 3D tương tác'}
-        </p>
-      </div>
 
 
     </article>
