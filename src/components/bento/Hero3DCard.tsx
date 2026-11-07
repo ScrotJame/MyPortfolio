@@ -176,14 +176,12 @@ export function Hero3DCard({
     >
       {/* Dual Ambient Corner Glows */}
       <div
-        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${
-          isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
-        }`}
+        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
+          }`}
       />
       <div
-        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${
-          isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
-        }`}
+        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
+          }`}
       />
 
       {/* Dot Matrix Background */}
@@ -193,9 +191,8 @@ export function Hero3DCard({
       <div className="flex items-center justify-between z-10 w-full">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[11px] font-mono text-white/70">
           <span
-            className={`w-2 h-2 rounded-full ${
-              isApp ? 'bg-cyan-400' : 'bg-purple-400'
-            } animate-pulse`}
+            className={`w-2 h-2 rounded-full ${isApp ? 'bg-cyan-400' : 'bg-purple-400'
+              } animate-pulse`}
           />
           <span>{isApp ? 'TRACK // 01 · APP ENGINE' : 'TRACK // 02 · GAME ENGINE'}</span>
         </div>
@@ -235,6 +232,7 @@ export function Hero3DCard({
           {locale === 'en' ? 'Interactive 3D Identity' : 'Nhận diện 3D tương tác'}
         </p>
       </div>
+
     </article>
   )
 }
@@ -256,9 +254,8 @@ function TwoSidedDigitalPass({
 
   return (
     <div
-      className={`relative w-52 sm:w-60 h-80 sm:h-92 select-none pointer-events-none will-change-transform ${
-        isFlipping ? 'transition-transform duration-500 ease-out' : 'transition-none'
-      }`}
+      className={`relative w-52 sm:w-60 h-80 sm:h-92 select-none pointer-events-none will-change-transform ${isFlipping ? 'transition-transform duration-500 ease-out' : 'transition-none'
+        }`}
       style={{
         perspective: '1200px',
         transformStyle: 'preserve-3d',
@@ -288,11 +285,10 @@ function TwoSidedDigitalPass({
           FACE 1: FRONT (MẶT TRƯỚC - AVATAR CHIẾM 2/3 PHÍA TRÊN & ĐỊNH DANH)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${
-          isApp
+        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${isApp
             ? 'bg-[#0b0c0e] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
             : 'bg-[#0b0c0e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-        }`}
+          }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
@@ -301,9 +297,8 @@ function TwoSidedDigitalPass({
       >
         {/* Holographic Specular Sheen Reflection */}
         <div
-          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 z-20 ${
-            isHovered ? 'opacity-35' : 'opacity-10'
-          } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 z-20 ${isHovered ? 'opacity-35' : 'opacity-10'
+            } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
         />
 
         {/* Top 2/3: Expansive Avatar Photo Section */}
@@ -333,9 +328,8 @@ function TwoSidedDigitalPass({
 
           {/* Verified Badge on bottom-right of photo */}
           <div
-            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${
-              isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
-            }`}
+            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
+              }`}
           >
             <CheckCircle size={14} strokeWidth={2.5} />
           </div>
@@ -368,11 +362,10 @@ function TwoSidedDigitalPass({
           FACE 2: BACK (MẶT SAU - CHỨC DANH, KỸ THUẬT & NFC CHIP)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${
-          isApp
+        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${isApp
             ? 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#091f17] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
             : 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#1e0e2e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-        }`}
+          }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
@@ -381,9 +374,8 @@ function TwoSidedDigitalPass({
       >
         {/* Holographic Specular Sheen Reflection */}
         <div
-          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${
-            isHovered ? 'opacity-35' : 'opacity-10'
-          } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isHovered ? 'opacity-35' : 'opacity-10'
+            } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
         />
 
         {/* Top of Face 2: NFC Chip & Spec Code */}
@@ -402,11 +394,10 @@ function TwoSidedDigitalPass({
         {/* Center of Face 2: Luminous Monogram Emblem */}
         <div className="flex flex-col items-center justify-center my-auto z-10">
           <div
-            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${
-              isApp
+            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${isApp
                 ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
                 : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
-            }`}
+              }`}
           >
             <Compass size={28} className="animate-pulse" />
           </div>

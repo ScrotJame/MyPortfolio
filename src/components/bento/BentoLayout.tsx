@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { BookOpen, Globe2 } from 'lucide-react'
 import type { BentoProject, BentoTrack } from '../../data/bentoData'
 import { IntroCard } from './IntroCard'
@@ -57,23 +56,7 @@ export function BentoLayout({
         />
       </div>
 
-      {/* 2. Color Wipe Transition Sweep (Transform from left to right) */}
-      <AnimatePresence>
-        <motion.div
-          key={`wipe-${devMode}`}
-          initial={{ x: '-100%', opacity: 0.85 }}
-          animate={{ x: '100%', opacity: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className={`fixed inset-0 pointer-events-none z-30 bg-gradient-to-r ${
-            isApp
-              ? 'from-transparent via-emerald-400/25 to-transparent'
-              : 'from-transparent via-purple-400/30 to-transparent'
-          }`}
-        />
-      </AnimatePresence>
-
-      {/* 3. Top Floating Glass Header */}
+      {/* 2. Top Floating Glass Header */}
       <header className="relative z-20 w-full max-w-[1400px] xl:max-w-[1480px] 2xl:max-w-[1560px] mx-auto pt-3 sm:pt-4 px-4 sm:px-6">
         <nav className="flex items-center justify-between py-2.5 px-4 sm:px-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md">
           {/* Logo / Brand Name */}

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { BookOpen, Mail } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
 import { profile } from '../../data/content'
@@ -71,62 +71,71 @@ export const SocialHubCard = memo(function SocialHubCard({ track, locale, onBlog
       />
 
       {/* Hexagonal / Radial Orbital Container exactly as aximoris */}
-      <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center select-none">
-        {/* Outer and Inner Concentric Orbit Ring Guides */}
-        <div className="absolute inset-2.5 rounded-full border border-white/[0.06] pointer-events-none" />
-        <div className="absolute inset-8 rounded-full border border-white/[0.04] pointer-events-none" />
-
-        {/* Central Core Gradient Orb (like aximoris multicolor sphere) */}
+      <AnimatePresence mode="wait">
         <motion.div
-          animate={{ scale: [1, 1.06, 1], rotate: [0, 180, 360] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          className="w-12 h-12 rounded-full flex items-center justify-center z-10 border border-white/20 shadow-[0_0_24px_rgba(129,140,248,0.35)] cursor-default bg-gradient-to-tr from-cyan-400 via-indigo-500 to-fuchsia-500"
+          key={track}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1], delay: 0.04 }}
+          className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center select-none"
         >
-          <div className="w-5 h-5 rounded-full bg-white/25 backdrop-blur-sm shadow-inner" />
-        </motion.div>
+          {/* Outer and Inner Concentric Orbit Ring Guides */}
+          <div className="absolute inset-2.5 rounded-full border border-white/[0.06] pointer-events-none" />
+          <div className="absolute inset-8 rounded-full border border-white/[0.04] pointer-events-none" />
 
-        {/* 6 Radial Sockets */}
-        {links.map((item) => {
-          const content = (
-            <motion.div
-              whileHover={{ scale: 1.15, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-10 h-10 rounded-2xl bg-[#18181b]/90 hover:bg-white/[0.12] border border-white/10 hover:border-white/30 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
-            >
-              {item.icon}
-            </motion.div>
-          )
+          {/* Central Core Gradient Orb (like aximoris multicolor sphere) */}
+          <motion.div
+            animate={{ scale: [1, 1.06, 1], rotate: [0, 180, 360] }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+            className="w-12 h-12 rounded-full flex items-center justify-center z-10 border border-white/20 shadow-[0_0_24px_rgba(129,140,248,0.35)] cursor-default bg-gradient-to-tr from-cyan-400 via-indigo-500 to-fuchsia-500"
+          >
+            <div className="w-5 h-5 rounded-full bg-white/25 backdrop-blur-sm shadow-inner" />
+          </motion.div>
 
-          if (item.onClick) {
+          {/* 6 Radial Sockets */}
+          {links.map((item) => {
+            const content = (
+              <motion.div
+                whileHover={{ scale: 1.15, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-10 h-10 rounded-2xl bg-[#18181b]/90 hover:bg-white/[0.12] border border-white/10 hover:border-white/30 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
+              >
+                {item.icon}
+              </motion.div>
+            )
+
+            if (item.onClick) {
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={item.label}
+                  title={item.label}
+                  onClick={item.onClick}
+                  className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-2xl`}
+                >
+                  {content}
+                </button>
+              )
+            }
+
             return (
-              <button
+              <a
                 key={item.id}
-                type="button"
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
                 aria-label={item.label}
                 title={item.label}
-                onClick={item.onClick}
                 className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-2xl`}
               >
                 {content}
-              </button>
+              </a>
             )
-          }
-
-          return (
-            <a
-              key={item.id}
-              href={item.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={item.label}
-              title={item.label}
-              className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-2xl`}
-            >
-              {content}
-            </a>
-          )
-        })}
-      </div>
+          })}
+        </motion.div>
+      </AnimatePresence>
 
       <span className="sr-only">{locale === 'en' ? 'Social Network Hub' : 'Kết nối mạng xã hội'}</span>
     </article>
