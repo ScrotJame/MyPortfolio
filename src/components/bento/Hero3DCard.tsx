@@ -17,6 +17,9 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
   const [rotate, setRotate] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
   const [isFlipped, setIsFlipped] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStartX, setDragStartX] = useState(0)
+  const [dragRotation, setDragRotation] = useState(0)
   const [splineFailed, setSplineFailed] = useState(!splineSceneUrl)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -24,14 +27,55 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
     const rect = cardRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left - rect.width / 2
     const y = e.clientY - rect.top - rect.height / 2
-    // Calculate rotation angles (max +/- 22 degrees)
-    const rotateX = (-y / (rect.height / 2)) * 22
-    const rotateY = (x / (rect.width / 2)) * 22
-    setRotate({ x: rotateX, y: rotateY })
+
+    if (isDragging) {
+      const deltaX = e.clientX - dragStartX
+      setDragRotation(deltaX * 0.7)
+    } else {
+      // Calculate subtle perspective tilt (+/- 18 degrees)
+      const rotateX = (-y / (rect.height / 2)) * 18
+      const rotateY = (x / (rect.width / 2)) * 18
+      setRotate({ x: rotateX, y: rotateY })
+    }
+  }
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsDragging(true)
+    setDragStartX(e.clientX)
+  }
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false)
+      // If dragged past threshold (40px / 30 deg), flip face
+      if (Math.abs(dragRotation) > 35) {
+        setIsFlipped((prev) => !prev)
+      }
+      setDragRotation(0)
+    }
+  }
+
+  // Mouse wheel rotation: rolling down/up rotates and flips between 2 faces
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (Math.abs(e.deltaY) > 8 || Math.abs(e.deltaX) > 8) {
+      if (e.deltaY > 8 || e.deltaX > 8) {
+        setIsFlipped(true)
+      } else if (e.deltaY < -8 || e.deltaX < -8) {
+        setIsFlipped(false)
+      }
+    }
   }
 
   const handleMouseLeave = () => {
     setIsHovered(false)
+    if (isDragging) {
+      if (Math.abs(dragRotation) > 35) {
+        setIsFlipped((prev) => !prev)
+      }
+      setIsDragging(false)
+      setDragRotation(0)
+    }
+    // Return tilt to 0, while KEEPING isFlipped exactly as it was!
     setRotate({ x: 0, y: 0 })
   }
 
@@ -43,9 +87,12 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
     <article
       ref={cardRef}
       onMouseMove={handleMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onWheel={handleWheel}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col justify-between h-full min-h-[480px] lg:min-h-[560px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300"
+      className="relative flex flex-col justify-between h-full min-h-[480px] lg:min-h-[560px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300 select-none cursor-grab active:cursor-grabbing"
     >
       {/* Top Ambient Aura Glow */}
       <div
@@ -73,7 +120,10 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
         {/* Quick Flip Toggle Button */}
         <button
           type="button"
-          onClick={toggleFlip}
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleFlip()
+          }}
           className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.07] hover:bg-white/[0.15] border border-white/15 text-[11px] font-semibold text-white/90 transition-all active:scale-95 cursor-pointer shadow-sm"
           title={locale === 'en' ? 'Click to flip card' : 'Bấm để lật thẻ 2 mặt'}
         >
@@ -85,7 +135,7 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
       {/* Center 3D Digital Pass Container */}
       <div className="relative flex-1 flex items-center justify-center my-4 min-h-[320px]">
         {splineSceneUrl && !splineFailed ? (
-          <Suspense fallback={<TwoSidedDigitalPass rotate={rotate} isHovered={isHovered} isApp={isApp} isFlipped={isFlipped} onFlip={toggleFlip} locale={locale} />}>
+          <Suspense fallback={<TwoSidedDigitalPass rotate={rotate} dragRotation={dragRotation} isHovered={isHovered} isApp={isApp} isFlipped={isFlipped} locale={locale} />}>
             <div className="w-full h-full absolute inset-0">
               <Spline
                 scene={splineSceneUrl}
@@ -96,10 +146,10 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
         ) : (
           <TwoSidedDigitalPass
             rotate={rotate}
+            dragRotation={dragRotation}
             isHovered={isHovered}
             isApp={isApp}
             isFlipped={isFlipped}
-            onFlip={toggleFlip}
             locale={locale}
           />
         )}
@@ -113,8 +163,8 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
         </h2>
         <p className="text-[11px] text-white/40 font-medium mt-0.5">
           {locale === 'en'
-            ? 'Hover to tilt · Click card to flip 360°'
-            : 'Rê chuột để xoay · Nhấp vào thẻ để lật 2 mặt'}
+            ? 'Rotate wheel or drag to flip · State is preserved on mouse out'
+            : 'Xoay con lăn hoặc kéo để lật · Giữ nguyên mặt khi chuột rời đi'}
         </p>
       </div>
     </article>
@@ -123,31 +173,31 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
 
 interface TwoSidedDigitalPassProps {
   rotate: { x: number; y: number }
+  dragRotation: number
   isHovered: boolean
   isApp: boolean
   isFlipped: boolean
-  onFlip: () => void
   locale: 'en' | 'vi'
 }
 
 function TwoSidedDigitalPass({
   rotate,
+  dragRotation,
   isHovered,
   isApp,
   isFlipped,
-  onFlip,
   locale
 }: TwoSidedDigitalPassProps) {
   const avatarSrc = `${import.meta.env.BASE_URL}images/avatar.jpg`
+  const currentTotalRotationY = rotate.y + dragRotation + (isFlipped ? 180 : 0)
 
   return (
     <div
-      onClick={onFlip}
-      className="relative w-52 sm:w-60 h-80 sm:h-92 select-none cursor-pointer transition-transform duration-500 ease-out"
+      className="relative w-52 sm:w-60 h-80 sm:h-92 select-none pointer-events-none transition-transform duration-500 ease-out"
       style={{
         perspective: '1200px',
         transformStyle: 'preserve-3d',
-        transform: `perspective(1200px) rotateX(${rotate.x}deg) rotateY(${rotate.y + (isFlipped ? 180 : 0)}deg)`
+        transform: `perspective(1200px) rotateX(${rotate.x}deg) rotateY(${currentTotalRotationY}deg)`
       }}
     >
       {/* 3D Lanyard Clip Top */}
@@ -177,7 +227,7 @@ function TwoSidedDigitalPass({
           className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300"
           style={{
             background: isHovered
-              ? `linear-gradient(${105 + rotate.y * 2}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
+              ? `linear-gradient(${105 + currentTotalRotationY * 1.5}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
               : 'none'
           }}
         />
@@ -207,7 +257,6 @@ function TwoSidedDigitalPass({
               alt="Nguyen Sy Manh Cuong"
               className="w-full h-full object-cover rounded-xl"
               onError={(e) => {
-                // If avatar fails, show sleek monogram
                 e.currentTarget.style.display = 'none'
               }}
             />
@@ -231,11 +280,11 @@ function TwoSidedDigitalPass({
           </div>
         </div>
 
-        {/* Bottom of Face 1: Hint to flip */}
+        {/* Bottom of Face 1: Hint */}
         <div className="z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/50">
           <span className="flex items-center gap-1 text-emerald-400">
             <RotateCw size={10} />
-            {locale === 'en' ? 'Tap to flip' : 'Chạm để lật'}
+            {locale === 'en' ? 'Wheel/drag to rotate' : 'Xoay chuột để lật'}
           </span>
           <span>#HANOI-VN</span>
         </div>
@@ -261,7 +310,7 @@ function TwoSidedDigitalPass({
           className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300"
           style={{
             background: isHovered
-              ? `linear-gradient(${105 - rotate.y * 2}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
+              ? `linear-gradient(${105 - currentTotalRotationY * 1.5}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
               : 'none'
           }}
         />

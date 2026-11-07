@@ -12,10 +12,10 @@ describe('Hero3DCard', () => {
   it('renders Vietnamese label when locale is vi', () => {
     render(<Hero3DCard track="app" locale="vi" />)
     expect(screen.getByText(/digital pass/i)).toBeInTheDocument()
-    expect(screen.getByText(/lật 2 mặt/i)).toBeInTheDocument()
+    expect(screen.getByText(/Xoay con lăn hoặc kéo để lật/i)).toBeInTheDocument()
   })
 
-  it('flips between avatar side and title/role side when flip button or card is clicked', async () => {
+  it('flips between avatar side and title/role side when flip button is clicked', async () => {
     const user = userEvent.setup()
     render(<Hero3DCard track="app" locale="en" />)
 
