@@ -12,7 +12,7 @@ describe('Hero3DCard', () => {
   it('renders Vietnamese label when locale is vi', () => {
     render(<Hero3DCard track="app" locale="vi" />)
     expect(screen.getByText(/digital pass/i)).toBeInTheDocument()
-    expect(screen.getByText(/Xoay con lăn hoặc kéo để lật/i)).toBeInTheDocument()
+    expect(screen.getByText(/Rê chuột để xoay 3D tự do/i)).toBeInTheDocument()
   })
 
   it('flips between avatar side and title/role side when flip button is clicked', async () => {
@@ -28,6 +28,6 @@ describe('Hero3DCard', () => {
 
     // Now showing back side
     expect(screen.getByText(/SOFTWARE ENGINEER/i)).toBeInTheDocument()
-    expect(screen.getByText(/PROFESSIONAL TITLE/i)).toBeInTheDocument()
+    expect(screen.getByText(/NFC · PASS/i)).toBeInTheDocument()
   })
 })
