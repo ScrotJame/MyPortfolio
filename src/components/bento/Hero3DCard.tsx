@@ -191,8 +191,9 @@ export function Hero3DCard({
       <div className="flex items-center justify-between z-10 w-full">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[11px] font-mono text-white/70">
           <span
-            className={`w-2 h-2 rounded-full ${isApp ? 'bg-cyan-400' : 'bg-purple-400'
-              } animate-pulse`}
+            className={`w-2 h-2 rounded-full ${
+              isApp ? 'bg-cyan-400' : 'bg-purple-400'
+            } animate-pulse`}
           />
           <span>{isApp ? 'TRACK // 01 · APP ENGINE' : 'TRACK // 02 · GAME ENGINE'}</span>
         </div>
@@ -232,6 +233,7 @@ export function Hero3DCard({
           {locale === 'en' ? 'Interactive 3D Identity' : 'Nhận diện 3D tương tác'}
         </p>
       </div>
+
 
     </article>
   )
@@ -286,8 +288,8 @@ function TwoSidedDigitalPass({
       ========================================================================= */}
       <div
         className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${isApp
-            ? 'bg-[#0b0c0e] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-            : 'bg-[#0b0c0e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+          ? 'bg-[#0b0c0e] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+          : 'bg-[#0b0c0e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
           }`}
         style={{
           backfaceVisibility: 'hidden',
@@ -363,8 +365,8 @@ function TwoSidedDigitalPass({
       ========================================================================= */}
       <div
         className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${isApp
-            ? 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#091f17] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-            : 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#1e0e2e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+          ? 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#091f17] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+          : 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#1e0e2e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
           }`}
         style={{
           backfaceVisibility: 'hidden',
@@ -395,8 +397,8 @@ function TwoSidedDigitalPass({
         <div className="flex flex-col items-center justify-center my-auto z-10">
           <div
             className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${isApp
-                ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
-                : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
+              ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
+              : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
               }`}
           >
             <Compass size={28} className="animate-pulse" />
