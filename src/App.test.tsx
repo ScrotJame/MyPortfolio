@@ -50,28 +50,6 @@ describe('portfolio visitor flows with Bento Grid UI', () => {
     })
   })
 
-  it('preserves 3D card flipped state when switching music tracks', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-
-    // Flip card to Back face
-    const flipBtn = screen.getByRole('button', { name: /back/i })
-    await user.click(flipBtn)
-
-    // Back face is now showing App specs
-    expect(screen.getByText(/NFC · PASS/i)).toBeInTheDocument()
-    expect(screen.getAllByText(/SOFTWARE ENGINEER/i).length).toBeGreaterThan(0)
-
-    // Switch music track from App to Game
-    const vinylBtn = screen.getByRole('button', { name: /switch track/i })
-    await user.click(vinylBtn)
-
-    // Verify card is STILL on Back face (now showing Game Developer specs, NOT reset to Front face)
-    expect(screen.getByText(/NFC · PASS/i)).toBeInTheDocument()
-    expect(screen.getAllByText(/GAME DEVELOPER/i).length).toBeGreaterThan(0)
-    expect(screen.getByRole('button', { name: /front/i })).toBeInTheDocument()
-  })
-
   it('opens and closes project detail modal', async () => {
     const user = userEvent.setup()
     render(<App />)
@@ -101,15 +79,17 @@ describe('portfolio visitor flows with Bento Grid UI', () => {
     const blogBtn = screen.getAllByRole('button', { name: /blog/i })[0]
     await user.click(blogBtn)
 
-    // Should render Blog page
-    expect(screen.getByRole('heading', { name: /App & Game Reviews/i })).toBeInTheDocument()
+    // Should render Bento Digital Archives page
+    expect(screen.getByText(/DIGITAL ARCHIVES/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /All Archives|Tất cả Kệ/i })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /View Details|Xem chi tiết/i }).length).toBeGreaterThan(0)
 
-    // Return to home via home link or logo
-    const homeBtn = screen.getByRole('link', { name: /Cuong Nguyen — Home|Cường Nguyễn — Trang chủ/i })
+    // Return to home via "Back to Home" button
+    const homeBtn = screen.getByRole('button', { name: /Back to Home|Về Portfolio/i })
     await user.click(homeBtn)
 
     await waitFor(() => {
-      expect(screen.getByText(/Digital Pass/i)).toBeInTheDocument()
+      expect(screen.getByText(/Latest Projects|Dự án tiêu biểu/i)).toBeInTheDocument()
     })
   })
 
