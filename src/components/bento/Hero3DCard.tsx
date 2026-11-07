@@ -9,13 +9,34 @@ interface Hero3DCardProps {
   track: BentoTrack
   locale: 'en' | 'vi'
   splineSceneUrl?: string
+  rotate?: { x: number; y: number }
+  onRotateChange?: (rotate: { x: number; y: number }) => void
 }
 
-export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
+export function Hero3DCard({
+  track,
+  locale,
+  splineSceneUrl,
+  rotate: controlledRotate,
+  onRotateChange
+}: Hero3DCardProps) {
   const isApp = track === 'app'
   const cardRef = useRef<HTMLDivElement>(null)
-  // Initial isometric 3D posture: looks dimensional immediately
-  const [rotate, setRotate] = useState({ x: 8, y: -12 })
+  // Internal fallback if not controlled by parent
+  const [internalRotate, setInternalRotate] = useState({ x: 8, y: -12 })
+  const rotate = controlledRotate ?? internalRotate
+
+  const setRotate = (
+    updater: { x: number; y: number } | ((prev: { x: number; y: number }) => { x: number; y: number })
+  ) => {
+    const nextVal = typeof updater === 'function' ? updater(rotate) : updater
+    if (onRotateChange) {
+      onRotateChange(nextVal)
+    } else {
+      setInternalRotate(nextVal)
+    }
+  }
+
   const [isHovered, setIsHovered] = useState(false)
   const lastPosRef = useRef<{ x: number; y: number } | null>(null)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
@@ -119,14 +140,12 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
     >
       {/* Dual Ambient Corner Glows exactly like aximoris.com */}
       <div
-        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${
-          isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
-        }`}
+        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
+          }`}
       />
       <div
-        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${
-          isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
-        }`}
+        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
+          }`}
       />
 
       {/* Dot Matrix Background */}
@@ -136,9 +155,8 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
       <div className="flex items-center justify-between z-10 w-full">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[11px] font-mono text-white/70">
           <span
-            className={`w-2 h-2 rounded-full ${
-              isApp ? 'bg-cyan-400' : 'bg-purple-400'
-            } animate-pulse`}
+            className={`w-2 h-2 rounded-full ${isApp ? 'bg-cyan-400' : 'bg-purple-400'
+              } animate-pulse`}
           />
           <span>{isApp ? 'TRACK // 01 · APP ENGINE' : 'TRACK // 02 · GAME ENGINE'}</span>
         </div>
@@ -178,7 +196,7 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
         )}
       </div>
 
-      {/* Bottom Status & Clean Tagline (removed 'rê chuột để xoay') */}
+      {/* Bottom Status & Clean Tagline */}
       <div className="flex flex-col items-center text-center z-10 pt-2 border-t border-white/[0.06]">
         <h2 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">
           <span>Digital Pass</span>
@@ -237,11 +255,10 @@ function TwoSidedDigitalPass({
           FACE 1: FRONT (MẶT TRƯỚC - AVATAR CHIẾM 2/3 PHÍA TRÊN & ĐỊNH DANH)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${
-          isApp
-            ? 'bg-neutral-950 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-            : 'bg-neutral-950 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-        }`}
+        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${isApp
+          ? 'bg-neutral-950 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+          : 'bg-neutral-950 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+          }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
@@ -285,9 +302,8 @@ function TwoSidedDigitalPass({
 
           {/* Verified Badge on bottom-right of photo */}
           <div
-            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${
-              isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
-            }`}
+            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
+              }`}
           >
             <CheckCircle size={14} strokeWidth={2.5} />
           </div>
@@ -320,11 +336,10 @@ function TwoSidedDigitalPass({
           FACE 2: BACK (MẶT SAU - CHỨC DANH, KỸ THUẬT & NFC CHIP)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${
-          isApp
-            ? 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#091f17]/95 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-            : 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#1e0e2e]/95 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-        }`}
+        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${isApp
+          ? 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#091f17]/95 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+          : 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#1e0e2e]/95 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+          }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
@@ -357,11 +372,10 @@ function TwoSidedDigitalPass({
         {/* Center of Face 2: Luminous Monogram Emblem */}
         <div className="flex flex-col items-center justify-center my-auto z-10">
           <div
-            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${
-              isApp
-                ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
-                : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
-            }`}
+            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${isApp
+              ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
+              : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
+              }`}
           >
             <Compass size={28} className="animate-pulse" />
           </div>

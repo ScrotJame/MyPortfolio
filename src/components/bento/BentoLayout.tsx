@@ -27,6 +27,8 @@ export function BentoLayout({
 }: BentoLayoutProps) {
   const [selectedProject, setSelectedProject] = useState<BentoProject | null>(null)
   const [isContactOpen, setIsContactOpen] = useState(false)
+  // Preserves 3D card orientation state across music track changes
+  const [cardRotation, setCardRotation] = useState({ x: 8, y: -12 })
   const isApp = devMode === 'app'
 
   return (
@@ -131,23 +133,16 @@ export function BentoLayout({
               </AnimatePresence>
             </div>
 
-            {/* Column 2 (Center): Hero 3D Card (Col 5) */}
+            {/* Column 2 (Center): Hero 3D Card (Preserves 3D rotation across track changes) */}
             <div className="lg:col-span-5 h-full flex flex-col">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`hero-${devMode}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: 'easeOut', delay: 0.04 }}
-                  className="h-full flex flex-col flex-1"
-                >
-                  <Hero3DCard
-                    track={devMode}
-                    locale={locale}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <div className="h-full flex flex-col flex-1">
+                <Hero3DCard
+                  track={devMode}
+                  locale={locale}
+                  rotate={cardRotation}
+                  onRotateChange={setCardRotation}
+                />
+              </div>
             </div>
 
             {/* Column 3 (Right): Stack of Social Hub & Projects (Col 3) */}
