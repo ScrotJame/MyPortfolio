@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Sparkles, Compass, RotateCw, CheckCircle } from 'lucide-react'
+import { Compass, CheckCircle } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
 
 interface Hero3DCardProps {
@@ -12,7 +12,7 @@ interface Hero3DCardProps {
 
 export function Hero3DCard({
   track,
-  locale,
+  locale: _locale,
   rotate: controlledRotate,
   onRotateChange
 }: Hero3DCardProps) {
@@ -37,7 +37,7 @@ export function Hero3DCard({
   }, [rotate])
 
   const [isHovered, setIsHovered] = useState(false)
-  const [isFlipping, setIsFlipping] = useState(false)
+  const isFlipping = false
   const lastPosRef = useRef<{ x: number; y: number } | null>(null)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const rafId = useRef<number | null>(null)
@@ -145,22 +145,7 @@ export function Hero3DCard({
     }
   }
 
-  // Determine current orientation face
-  const normalizedY = ((Math.round(rotate.y) % 360) + 360) % 360
-  const isBackFacing = normalizedY > 90 && normalizedY < 270
 
-  const toggleFlip = () => {
-    setIsFlipping(true)
-    const nextRotate = {
-      x: 0,
-      y: isBackFacing ? 0 : 180
-    }
-    setRotate(nextRotate)
-    onRotateChange?.(nextRotate)
-    setTimeout(() => {
-      setIsFlipping(false)
-    }, 550)
-  }
 
   return (
     <article
