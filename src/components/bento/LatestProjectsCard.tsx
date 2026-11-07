@@ -12,7 +12,7 @@ export function LatestProjectsCard({ track, locale, onSelectProject }: LatestPro
   const projects = bentoProjects[track]
 
   return (
-    <article className="flex flex-col justify-between h-full min-h-[290px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-5 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
+    <article className="flex flex-col justify-between h-full min-h-[280px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-5 lg:p-6 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
       {/* Header */}
       <div className="flex items-center justify-between z-10 mb-3">
         <span className="text-[11px] font-bold uppercase tracking-wider text-white/50 flex items-center gap-1.5">
@@ -25,7 +25,7 @@ export function LatestProjectsCard({ track, locale, onSelectProject }: LatestPro
       </div>
 
       {/* Vertical Project List */}
-      <div className="space-y-2 flex-1 overflow-y-auto max-h-[210px] pr-1 scrollbar-thin">
+      <div className="space-y-2 flex-1 overflow-y-auto pr-1 scrollbar-thin">
         {projects.map((proj) => (
           <button
             key={proj.id}
@@ -60,10 +60,9 @@ export function LatestProjectsCard({ track, locale, onSelectProject }: LatestPro
       </div>
 
       {/* Footer Info */}
-      <div className="pt-2 text-center text-[10px] text-white/40 font-mono border-t border-white/[0.06]">
+      <div className="pt-2 text-center text-[10px] text-white/40 font-mono border-t border-white/[0.06] mt-2">
         {locale === 'en' ? 'Click case to expand full spec' : 'Bấm vào dự án để xem chi tiết'}
       </div>
     </article>
   )
 }
-

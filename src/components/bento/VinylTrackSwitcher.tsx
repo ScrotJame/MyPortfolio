@@ -20,12 +20,12 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
     : `Chuyển sang bản nhạc ${isApp ? 'Game Dev' : 'App Dev'}`
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+    <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5">
       <div className="hidden sm:flex flex-col items-end">
-        <span className="text-[10px] uppercase font-bold tracking-widest text-white/50">
+        <span className="text-[9px] uppercase font-bold tracking-widest text-white/40">
           {locale === 'en' ? 'Now Spinning' : 'Đang phát'}
         </span>
-        <span className="text-xs font-semibold text-white/90">
+        <span className="text-[11px] font-semibold text-white/80">
           {isApp ? 'App · Mobile & AI' : 'Game · 3D & Physics'}
         </span>
       </div>
@@ -42,10 +42,10 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
             handleToggle()
           }
         }}
-        className={`group relative w-16 h-16 sm:w-20 sm:h-20 rounded-full cursor-pointer p-1 transition-all duration-500 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+        className={`group relative w-12 h-12 sm:w-14 sm:h-14 rounded-full cursor-pointer p-0.5 transition-all duration-500 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
           isApp
-            ? 'border-2 border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.35)] focus-visible:ring-emerald-400'
-            : 'border-2 border-purple-400 shadow-[0_0_30px_rgba(168,85,247,0.35)] focus-visible:ring-purple-400'
+            ? 'border-2 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.35)] focus-visible:ring-emerald-400'
+            : 'border-2 border-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.35)] focus-visible:ring-purple-400'
         }`}
       >
         {/* Vinyl Disc Body with concentric groove lines */}
@@ -69,18 +69,18 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
 
           {/* Center Label (Spindle Hub) */}
           <div
-            className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex flex-col items-center justify-center transition-colors duration-500 z-10 ${
+            className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex flex-col items-center justify-center transition-colors duration-500 z-10 ${
               isApp
                 ? 'bg-emerald-500 text-black shadow-inner shadow-emerald-700'
                 : 'bg-purple-500 text-white shadow-inner shadow-purple-800'
             }`}
           >
             {isApp ? (
-              <Disc3 size={14} className="animate-spin" />
+              <Disc3 size={11} className="animate-spin" />
             ) : (
-              <Music2 size={14} className="animate-pulse" />
+              <Music2 size={11} className="animate-pulse" />
             )}
-            <span className="text-[7px] font-black uppercase tracking-tighter leading-none mt-0.5">
+            <span className="text-[6px] font-black uppercase tracking-tighter leading-none mt-0.5">
               {isApp ? 'APP' : 'GAME'}
             </span>
           </div>
@@ -96,4 +96,3 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
     </div>
   )
 }
-

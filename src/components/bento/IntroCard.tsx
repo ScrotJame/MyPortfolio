@@ -22,13 +22,13 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
   const cvHref = `${import.meta.env.BASE_URL}cv/Nguyen_Sy_Manh_Cuong_CV_Flutter.pdf`
 
   return (
-    <article className="flex flex-col justify-between h-full bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 sm:p-7 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
+    <article className="flex flex-col justify-between h-full bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
       {/* Subtle top-left aura light */}
       <div className="absolute -top-16 -left-16 w-44 h-44 bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Top Header: Username and Status Badge */}
       <div>
-        <div className="flex items-center justify-between gap-3 mb-6">
+        <div className="flex items-center justify-between gap-3 mb-5">
           <span className="text-xs font-semibold text-white/50 tracking-wider">
             {profile.handle}
           </span>
@@ -39,21 +39,21 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
         </div>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-white tracking-tight leading-[1.1] mb-2">
+        <h1 className="text-3xl sm:text-4xl lg:text-[40px] xl:text-[44px] font-extrabold text-white tracking-tight leading-[1.1] mb-2">
           {locale === 'en' ? "Hello! I'm Cuong" : 'Xin chào! Mình là Cường'}
         </h1>
 
-        <p className="text-xs sm:text-sm font-semibold text-white/60 mb-4 tracking-wide uppercase">
+        <p className="text-xs sm:text-sm font-semibold text-white/60 mb-3.5 tracking-wide uppercase">
           {profile.title[locale]}
         </p>
 
         {/* Bio Copy */}
-        <p className="text-sm leading-relaxed text-white/70 mb-6 font-normal">
+        <p className="text-xs sm:text-sm leading-relaxed text-white/70 mb-5 font-normal">
           {profile.bio[locale]}
         </p>
 
         {/* Skill Pills */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6">
           {profile.skills.map((skill) => (
             <span
               key={skill}
@@ -99,10 +99,10 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
           <button
             type="button"
             onClick={onContactClick}
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-white text-black text-xs sm:text-sm font-bold hover:bg-neutral-200 active:scale-98 transition-all duration-200 shadow-md cursor-pointer"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-white !text-neutral-950 text-xs sm:text-sm font-extrabold hover:bg-neutral-200 active:scale-98 transition-all duration-200 shadow-md cursor-pointer"
           >
-            <Mail size={15} />
-            <span>{locale === 'en' ? 'Contact me' : 'Liên hệ'}</span>
+            <Mail size={15} className="!text-neutral-950 shrink-0" />
+            <span className="!text-neutral-950 font-bold">{locale === 'en' ? 'Contact me' : 'Liên hệ'}</span>
           </button>
 
           <a
@@ -121,4 +121,3 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
     </article>
   )
 }
-

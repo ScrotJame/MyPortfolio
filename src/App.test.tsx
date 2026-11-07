@@ -36,7 +36,7 @@ describe('portfolio visitor flows with Bento Grid UI', () => {
     render(<App />)
 
     // Initially in App Dev mode
-    expect(screen.getByText(/Software Engineer/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/Software Engineer/i).length).toBeGreaterThan(0)
     expect(screen.getByText('Flutter')).toBeInTheDocument()
 
     // Click vinyl disc to switch to Game Dev
