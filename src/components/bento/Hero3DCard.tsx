@@ -1,9 +1,6 @@
-import { useState, useRef, Suspense, lazy } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Sparkles, Compass, RotateCw, CheckCircle } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
-
-// Lazy load Spline to prevent SSR / WebGL blocking
-const Spline = lazy(() => import('@splinetool/react-spline'))
 
 interface Hero3DCardProps {
   track: BentoTrack
@@ -16,39 +13,56 @@ interface Hero3DCardProps {
 export function Hero3DCard({
   track,
   locale,
-  splineSceneUrl,
   rotate: controlledRotate,
   onRotateChange
 }: Hero3DCardProps) {
   const isApp = track === 'app'
   const cardRef = useRef<HTMLDivElement>(null)
-  // Internal fallback if not controlled by parent
-  const [internalRotate, setInternalRotate] = useState({ x: 8, y: -12 })
-  const rotate = controlledRotate ?? internalRotate
 
-  const setRotate = (
-    updater: { x: number; y: number } | ((prev: { x: number; y: number }) => { x: number; y: number })
-  ) => {
-    const nextVal = typeof updater === 'function' ? updater(rotate) : updater
-    if (onRotateChange) {
-      onRotateChange(nextVal)
-    } else {
-      setInternalRotate(nextVal)
-    }
+  // Internal rotation state for responsive 60-120fps animation
+  const [rotate, setRotate] = useState(() => controlledRotate ?? { x: 8, y: -12 })
+  const [prevControlled, setPrevControlled] = useState(controlledRotate)
+  const rotateRef = useRef(rotate)
+
+  if (
+    controlledRotate &&
+    (controlledRotate.x !== prevControlled?.x || controlledRotate.y !== prevControlled?.y)
+  ) {
+    setPrevControlled(controlledRotate)
+    setRotate(controlledRotate)
   }
 
+  useEffect(() => {
+    rotateRef.current = rotate
+  }, [rotate])
+
   const [isHovered, setIsHovered] = useState(false)
+  const [isFlipping, setIsFlipping] = useState(false)
   const lastPosRef = useRef<{ x: number; y: number } | null>(null)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
-  const [splineFailed, setSplineFailed] = useState(!splineSceneUrl)
+  const rafId = useRef<number | null>(null)
+  const pendingDelta = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 })
 
-  // Approach 1: Virtual Trackball — Hover & move mouse directly rotates card in 3D without clicking or holding
+  const applyPendingRotation = () => {
+    const { dx, dy } = pendingDelta.current
+    if (dx !== 0 || dy !== 0) {
+      setRotate((prev) => ({
+        x: Math.max(-55, Math.min(55, prev.x - dy * 0.55)),
+        y: prev.y + dx * 0.85
+      }))
+      pendingDelta.current = { dx: 0, dy: 0 }
+    }
+    rafId.current = null
+  }
+
+  // Virtual Trackball — Hover & move mouse directly rotates card in 3D without clicking or holding
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsHovered(true)
     lastPosRef.current = { x: e.clientX, y: e.clientY }
   }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isFlipping) return
     if (!lastPosRef.current) {
       lastPosRef.current = { x: e.clientX, y: e.clientY }
       return
@@ -65,19 +79,23 @@ export function Hero3DCard({
 
     lastPosRef.current = { x: e.clientX, y: e.clientY }
 
-    const speedX = 0.85
-    const speedY = 0.55
+    pendingDelta.current.dx += deltaX
+    pendingDelta.current.dy += deltaY
 
-    setRotate((prev) => ({
-      x: Math.max(-55, Math.min(55, prev.x - deltaY * speedY)),
-      y: prev.y + deltaX * speedX
-    }))
+    if (rafId.current === null) {
+      rafId.current = requestAnimationFrame(applyPendingRotation)
+    }
   }
 
   const handleMouseLeave = () => {
     setIsHovered(false)
     lastPosRef.current = null
-    // State is preserved! Card holds its current 3D orientation in zero gravity
+    if (rafId.current !== null) {
+      cancelAnimationFrame(rafId.current)
+      applyPendingRotation()
+    }
+    // Sync final orientation state to parent so it's preserved across vinyl track switches!
+    onRotateChange?.(rotateRef.current)
   }
 
   // Touch screen support for mobile/tablets
@@ -88,30 +106,42 @@ export function Hero3DCard({
   }
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!touchStartRef.current || e.touches.length === 0) return
+    if (isFlipping || !touchStartRef.current || e.touches.length === 0) return
     const touch = e.touches[0]
     const deltaX = touch.clientX - touchStartRef.current.x
     const deltaY = touch.clientY - touchStartRef.current.y
     touchStartRef.current = { x: touch.clientX, y: touch.clientY }
 
-    setRotate((prev) => ({
-      x: Math.max(-55, Math.min(55, prev.x - deltaY * 0.55)),
-      y: prev.y + deltaX * 0.85
-    }))
+    pendingDelta.current.dx += deltaX
+    pendingDelta.current.dy += deltaY
+
+    if (rafId.current === null) {
+      rafId.current = requestAnimationFrame(applyPendingRotation)
+    }
   }
 
   const handleTouchEnd = () => {
     touchStartRef.current = null
+    if (rafId.current !== null) {
+      cancelAnimationFrame(rafId.current)
+      applyPendingRotation()
+    }
+    onRotateChange?.(rotateRef.current)
   }
 
   // Mouse wheel rotation adds momentum to Y axis
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (isFlipping) return
     if (Math.abs(e.deltaY) > 5 || Math.abs(e.deltaX) > 5) {
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX
-      setRotate((prev) => ({
-        ...prev,
-        y: prev.y + (delta > 0 ? 25 : -25)
-      }))
+      setRotate((prev) => {
+        const next = {
+          ...prev,
+          y: prev.y + (delta > 0 ? 25 : -25)
+        }
+        onRotateChange?.(next)
+        return next
+      })
     }
   }
 
@@ -120,10 +150,16 @@ export function Hero3DCard({
   const isBackFacing = normalizedY > 90 && normalizedY < 270
 
   const toggleFlip = () => {
-    setRotate({
+    setIsFlipping(true)
+    const nextRotate = {
       x: 0,
       y: isBackFacing ? 0 : 180
-    })
+    }
+    setRotate(nextRotate)
+    onRotateChange?.(nextRotate)
+    setTimeout(() => {
+      setIsFlipping(false)
+    }, 550)
   }
 
   return (
@@ -136,16 +172,18 @@ export function Hero3DCard({
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onWheel={handleWheel}
-      className="relative flex flex-col justify-between h-full min-h-[480px] lg:min-h-[560px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300 select-none cursor-crosshair"
+      className="relative flex flex-col justify-between h-full min-h-[480px] lg:min-h-[560px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300 select-none cursor-crosshair will-change-transform"
     >
-      {/* Dual Ambient Corner Glows exactly like aximoris.com */}
+      {/* Dual Ambient Corner Glows */}
       <div
-        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
-          }`}
+        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${
+          isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
+        }`}
       />
       <div
-        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
-          }`}
+        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${
+          isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
+        }`}
       />
 
       {/* Dot Matrix Background */}
@@ -155,8 +193,9 @@ export function Hero3DCard({
       <div className="flex items-center justify-between z-10 w-full">
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[11px] font-mono text-white/70">
           <span
-            className={`w-2 h-2 rounded-full ${isApp ? 'bg-cyan-400' : 'bg-purple-400'
-              } animate-pulse`}
+            className={`w-2 h-2 rounded-full ${
+              isApp ? 'bg-cyan-400' : 'bg-purple-400'
+            } animate-pulse`}
           />
           <span>{isApp ? 'TRACK // 01 · APP ENGINE' : 'TRACK // 02 · GAME ENGINE'}</span>
         </div>
@@ -178,22 +217,12 @@ export function Hero3DCard({
 
       {/* Center 3D Digital Pass Container */}
       <div className="relative flex-1 flex items-center justify-center my-4 min-h-[320px]">
-        {splineSceneUrl && !splineFailed ? (
-          <Suspense fallback={<TwoSidedDigitalPass rotate={rotate} isHovered={isHovered} isApp={isApp} />}>
-            <div className="w-full h-full absolute inset-0">
-              <Spline
-                scene={splineSceneUrl}
-                onError={() => setSplineFailed(true)}
-              />
-            </div>
-          </Suspense>
-        ) : (
-          <TwoSidedDigitalPass
-            rotate={rotate}
-            isHovered={isHovered}
-            isApp={isApp}
-          />
-        )}
+        <TwoSidedDigitalPass
+          rotate={rotate}
+          isHovered={isHovered}
+          isFlipping={isFlipping}
+          isApp={isApp}
+        />
       </div>
 
       {/* Bottom Status & Clean Tagline */}
@@ -213,19 +242,23 @@ export function Hero3DCard({
 interface TwoSidedDigitalPassProps {
   rotate: { x: number; y: number }
   isHovered: boolean
+  isFlipping: boolean
   isApp: boolean
 }
 
 function TwoSidedDigitalPass({
   rotate,
   isHovered,
+  isFlipping,
   isApp
 }: TwoSidedDigitalPassProps) {
   const avatarSrc = `${import.meta.env.BASE_URL}images/avatar.jpg`
 
   return (
     <div
-      className="relative w-52 sm:w-60 h-80 sm:h-92 select-none pointer-events-none transition-transform duration-100 ease-out"
+      className={`relative w-52 sm:w-60 h-80 sm:h-92 select-none pointer-events-none will-change-transform ${
+        isFlipping ? 'transition-transform duration-500 ease-out' : 'transition-none'
+      }`}
       style={{
         perspective: '1200px',
         transformStyle: 'preserve-3d',
@@ -240,7 +273,7 @@ function TwoSidedDigitalPass({
         <div className="w-4 h-2 bg-neutral-950 rounded-sm border border-white/10" />
       </div>
 
-      {/* 3D Volumetric Side Rim / Core (gives tangible thickness when viewed at oblique angles) */}
+      {/* 3D Volumetric Side Rim / Core */}
       <div
         className="absolute inset-0 rounded-2xl border-2 border-white/10 bg-neutral-950/80 shadow-2xl pointer-events-none"
         style={{
@@ -255,24 +288,22 @@ function TwoSidedDigitalPass({
           FACE 1: FRONT (MẶT TRƯỚC - AVATAR CHIẾM 2/3 PHÍA TRÊN & ĐỊNH DANH)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${isApp
-          ? 'bg-neutral-950 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-          : 'bg-neutral-950 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-          }`}
+        className={`absolute inset-0 w-full h-full rounded-2xl flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${
+          isApp
+            ? 'bg-[#0b0c0e] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+            : 'bg-[#0b0c0e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+        }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
           transform: 'translateZ(5px)'
         }}
       >
-        {/* Holographic Specular Sheen Reflection moving with rotation */}
+        {/* Holographic Specular Sheen Reflection */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300 z-20"
-          style={{
-            background: isHovered
-              ? `linear-gradient(${105 + rotate.y * 1.5}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
-              : 'none'
-          }}
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 z-20 ${
+            isHovered ? 'opacity-35' : 'opacity-10'
+          } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
         />
 
         {/* Top 2/3: Expansive Avatar Photo Section */}
@@ -298,19 +329,20 @@ function TwoSidedDigitalPass({
           </div>
 
           {/* Bottom gradient fade into lower info section */}
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0b0c0e] via-[#0b0c0e]/60 to-transparent pointer-events-none" />
 
           {/* Verified Badge on bottom-right of photo */}
           <div
-            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
-              }`}
+            className={`absolute bottom-2.5 right-3 w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 z-10 ${
+              isApp ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'
+            }`}
           >
             <CheckCircle size={14} strokeWidth={2.5} />
           </div>
         </div>
 
         {/* Bottom 1/3: Identity & Role Specs */}
-        <div className="h-[34%] p-3.5 sm:p-4 flex flex-col justify-between bg-neutral-950 relative z-10">
+        <div className="h-[34%] p-3.5 sm:p-4 flex flex-col justify-between bg-[#0b0c0e] relative z-10">
           <div>
             <h3 className="text-sm sm:text-base font-black tracking-wider text-white uppercase leading-tight">
               CƯỜNG NGUYỄN
@@ -324,7 +356,7 @@ function TwoSidedDigitalPass({
             </p>
           </div>
 
-          {/* Bottom Metas (Clean, no 'rê chuột để xoay') */}
+          {/* Bottom Metas */}
           <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-white/50">
             <span className="font-semibold text-emerald-400/90 tracking-wider">#VERIFIED</span>
             <span className="text-white/40">#HANOI-VN</span>
@@ -336,24 +368,22 @@ function TwoSidedDigitalPass({
           FACE 2: BACK (MẶT SAU - CHỨC DANH, KỸ THUẬT & NFC CHIP)
       ========================================================================= */}
       <div
-        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden backdrop-blur-2xl border transition-colors duration-300 shadow-2xl ${isApp
-          ? 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#091f17]/95 border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
-          : 'bg-gradient-to-br from-neutral-900/98 via-neutral-950/98 to-[#1e0e2e]/95 border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
-          }`}
+        className={`absolute inset-0 w-full h-full rounded-2xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden border transition-colors duration-300 shadow-2xl ${
+          isApp
+            ? 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#091f17] border-emerald-500/35 shadow-[0_20px_60px_rgba(16,185,129,0.2)]'
+            : 'bg-gradient-to-br from-[#121316] via-[#090a0c] to-[#1e0e2e] border-purple-500/35 shadow-[0_20px_60px_rgba(168,85,247,0.2)]'
+        }`}
         style={{
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
           transform: 'rotateY(180deg) translateZ(5px)'
         }}
       >
-        {/* Holographic Specular Sheen Reflection moving with rotation */}
+        {/* Holographic Specular Sheen Reflection */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300"
-          style={{
-            background: isHovered
-              ? `linear-gradient(${105 - rotate.y * 1.5}deg, transparent 20%, rgba(255, 255, 255, 0.22) 50%, transparent 80%)`
-              : 'none'
-          }}
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${
+            isHovered ? 'opacity-35' : 'opacity-10'
+          } bg-gradient-to-tr from-transparent via-white/15 to-transparent`}
         />
 
         {/* Top of Face 2: NFC Chip & Spec Code */}
@@ -372,10 +402,11 @@ function TwoSidedDigitalPass({
         {/* Center of Face 2: Luminous Monogram Emblem */}
         <div className="flex flex-col items-center justify-center my-auto z-10">
           <div
-            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${isApp
-              ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
-              : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
-              }`}
+            className={`w-16 h-16 rounded-full flex items-center justify-center border transition-all duration-500 shadow-xl ${
+              isApp
+                ? 'bg-emerald-500/10 border-emerald-400/40 text-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
+                : 'bg-purple-500/10 border-purple-400/40 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
+            }`}
           >
             <Compass size={28} className="animate-pulse" />
           </div>

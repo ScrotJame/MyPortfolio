@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Mail } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
@@ -10,7 +11,7 @@ interface SocialHubCardProps {
   onBlogClick?: () => void
 }
 
-export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps) {
+export const SocialHubCard = memo(function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps) {
   const isApp = track === 'app'
 
   const links = [
@@ -130,4 +131,4 @@ export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps
       <span className="sr-only">{locale === 'en' ? 'Social Network Hub' : 'Kết nối mạng xã hội'}</span>
     </article>
   )
-}
+})

@@ -36,22 +36,22 @@ export function BentoLayout({
       {/* 1. Ambient Background Multi-Mesh Glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div
-          className={`absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full blur-[150px] transition-colors duration-1000 opacity-35 ${
+          className={`absolute -top-32 -left-32 w-[650px] h-[650px] rounded-full blur-[120px] transition-colors duration-1000 opacity-35 transform-gpu will-change-transform ${
             isApp ? 'bg-emerald-500' : 'bg-purple-600'
           }`}
         />
         <div
-          className={`absolute top-1/4 -right-32 w-[650px] h-[650px] rounded-full blur-[160px] transition-colors duration-1000 opacity-30 ${
+          className={`absolute top-1/4 -right-32 w-[650px] h-[650px] rounded-full blur-[120px] transition-colors duration-1000 opacity-30 transform-gpu will-change-transform ${
             isApp ? 'bg-cyan-600' : 'bg-amber-600'
           }`}
         />
         <div
-          className={`absolute -bottom-32 -right-20 w-[600px] h-[600px] rounded-full blur-[160px] transition-colors duration-1000 opacity-25 ${
+          className={`absolute -bottom-32 -right-20 w-[600px] h-[600px] rounded-full blur-[120px] transition-colors duration-1000 opacity-25 transform-gpu will-change-transform ${
             isApp ? 'bg-blue-600' : 'bg-pink-600'
           }`}
         />
         <div
-          className={`absolute -bottom-40 left-1/4 w-[600px] h-[600px] rounded-full blur-[150px] transition-colors duration-1000 opacity-20 ${
+          className={`absolute -bottom-40 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] transition-colors duration-1000 opacity-20 transform-gpu will-change-transform ${
             isApp ? 'bg-teal-600' : 'bg-violet-600'
           }`}
         />

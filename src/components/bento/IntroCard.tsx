@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { ArrowUpRight, Download, Mail, MapPin } from 'lucide-react'
 import { bentoContent, getHanoiTime, type BentoTrack } from '../../data/bentoData'
 
@@ -8,7 +8,7 @@ interface IntroCardProps {
   onContactClick: () => void
 }
 
-export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
+export const IntroCard = memo(function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
   const profile = bentoContent[track][locale]
   const [hanoiTime, setHanoiTime] = useState(() => getHanoiTime())
 
@@ -118,4 +118,4 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
       </div>
     </article>
   )
-}
+})

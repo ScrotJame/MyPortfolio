@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { bentoProjects, type BentoProject, type BentoTrack } from '../../data/bentoData'
 
@@ -7,7 +8,7 @@ interface LatestProjectsCardProps {
   onSelectProject: (project: BentoProject) => void
 }
 
-export function LatestProjectsCard({ track, locale, onSelectProject }: LatestProjectsCardProps) {
+export const LatestProjectsCard = memo(function LatestProjectsCard({ track, locale, onSelectProject }: LatestProjectsCardProps) {
   const isApp = track === 'app'
   const projects = bentoProjects[track]
 
@@ -66,4 +67,4 @@ export function LatestProjectsCard({ track, locale, onSelectProject }: LatestPro
       </div>
     </article>
   )
-}
+})

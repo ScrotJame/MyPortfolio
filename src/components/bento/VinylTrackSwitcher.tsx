@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Disc3, Music2 } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
 
@@ -7,7 +8,7 @@ interface VinylTrackSwitcherProps {
   locale: 'en' | 'vi'
 }
 
-export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: VinylTrackSwitcherProps) {
+export const VinylTrackSwitcher = memo(function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: VinylTrackSwitcherProps) {
   const isApp = currentTrack === 'app'
   const nextTrack: BentoTrack = isApp ? 'game' : 'app'
 
@@ -95,4 +96,4 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
       </button>
     </div>
   )
-}
+})
