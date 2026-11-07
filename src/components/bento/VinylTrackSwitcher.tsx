@@ -96,3 +96,4 @@ export function VinylTrackSwitcher({ currentTrack, onTrackChange, locale }: Viny
     </div>
   )
 }
+

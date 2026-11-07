@@ -228,3 +228,4 @@ export function getHanoiTime(date: Date = new Date()): { timeString: string; tim
     timeZone: 'GMT+7'
   }
 }
+

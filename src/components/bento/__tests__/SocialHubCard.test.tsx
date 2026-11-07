@@ -18,3 +18,4 @@ describe('SocialHubCard', () => {
     expect(handleBlogClick).toHaveBeenCalledTimes(1)
   })
 })
+

@@ -1,6 +1,6 @@
 # Bento Grid Dark Mode Redesign & Vinyl Track Switcher Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build a high-craft Bento Grid Dark Mode Portfolio Dashboard inspired by the "Digital Pass" aesthetic by Max (@aximoris), featuring a 3-column desktop layout, interactive 3D Hero card, ambient glow, and an interactive Vinyl Music Disc switcher to toggle between App Dev and Game Dev with a left-to-right color wipe and bottom-to-top content transition.
 
@@ -33,14 +33,14 @@
 **Interfaces:**
 - Produces: CSS animation utilities (`animate-spin-slow`, `.bento-glow`, `.dot-matrix-bg`, `.color-wipe-overlay`), packages installed (`framer-motion`, `@splinetool/react-spline`, `@splinetool/runtime`).
 
-- [ ] **Step 1: Install `framer-motion`, `@splinetool/react-spline`, and `@splinetool/runtime`**
+- [x] **Step 1: Install `framer-motion`, `@splinetool/react-spline`, and `@splinetool/runtime`**
 
 Run:
 ```bash
 npm install framer-motion @splinetool/react-spline @splinetool/runtime
 ```
 
-- [ ] **Step 2: Add CSS utility classes in `src/styles.css`**
+- [x] **Step 2: Add CSS utility classes in `src/styles.css`**
 
 Add keyframe animations for vinyl spinning, dot-matrix pattern, and theme wipe variables in `src/styles.css`:
 ```css
@@ -59,12 +59,12 @@ Add keyframe animations for vinyl spinning, dot-matrix pattern, and theme wipe v
 }
 ```
 
-- [ ] **Step 3: Verify build and test suite run cleanly**
+- [x] **Step 3: Verify build and test suite run cleanly**
 
 Run: `npm test`  
 Expected: All existing tests pass.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add package.json package-lock.json src/styles.css
@@ -106,7 +106,7 @@ git commit -m "chore: install framer-motion and spline runtime, configure bento 
   export function getHanoiTime(date?: Date): { timeString: string; timeZone: string }
   ```
 
-- [ ] **Step 1: Write test for `bentoData` & `getHanoiTime`**
+- [x] **Step 1: Write test for `bentoData` & `getHanoiTime`**
 
 Create `src/data/__tests__/bentoData.test.ts`:
 ```typescript
@@ -134,12 +134,12 @@ describe('bentoData', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/data/__tests__/bentoData.test.ts`  
 Expected: FAIL ("Cannot find module '../bentoData'")
 
-- [ ] **Step 3: Implement `src/data/bentoData.ts`**
+- [x] **Step 3: Implement `src/data/bentoData.ts`**
 
 Create `src/data/bentoData.ts` with complete data for App Dev and Game Dev in both EN and VI:
 - App Dev skills: `Flutter`, `React`, `TypeScript`, `Dart`, `FastAPI`, `AI Agents`, `SQLite`, `PostgreSQL`
@@ -147,12 +147,12 @@ Create `src/data/bentoData.ts` with complete data for App Dev and Game Dev in bo
 - Full project listings for both tracks (VSF EV Dispatch, CarX AI, Dungeonary, Rentify for App Dev; Enspire Unity-iOS, IMSOFT Game Intern, 3D prototypes for Game Dev).
 - `getHanoiTime` implementation using `Intl.DateTimeFormat` with `timeZone: 'Asia/Bangkok'`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/data/__tests__/bentoData.test.ts`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/data/bentoData.ts src/data/__tests__/bentoData.test.ts
@@ -179,7 +179,7 @@ git commit -m "feat: add bento data model and Hanoi time helper for dual tracks"
   export function VinylTrackSwitcher(props: VinylTrackSwitcherProps): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `VinylTrackSwitcher`**
+- [x] **Step 1: Write failing test for `VinylTrackSwitcher`**
 
 Create `src/components/bento/__tests__/VinylTrackSwitcher.test.tsx`:
 ```typescript
@@ -204,12 +204,12 @@ describe('VinylTrackSwitcher', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/VinylTrackSwitcher.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `VinylTrackSwitcher`**
+- [x] **Step 3: Implement `VinylTrackSwitcher`**
 
 Create `src/components/bento/VinylTrackSwitcher.tsx`:
 - Render circular vinyl disk with concentric groove SVG styling.
@@ -219,12 +219,12 @@ Create `src/components/bento/VinylTrackSwitcher.tsx`:
   - Game: `border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.4)]`
 - Add accessibility attributes: `role="button"`, `aria-label="Switch track between App and Game"`, keyboard accessible (`onKeyDown`).
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/components/bento/__tests__/VinylTrackSwitcher.test.tsx`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bento/VinylTrackSwitcher.tsx src/components/bento/__tests__/VinylTrackSwitcher.test.tsx
@@ -251,7 +251,7 @@ git commit -m "feat: implement interactive vinyl track switcher dock"
   export function IntroCard(props: IntroCardProps): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `IntroCard`**
+- [x] **Step 1: Write failing test for `IntroCard`**
 
 Create `src/components/bento/__tests__/IntroCard.test.tsx`:
 ```typescript
@@ -270,12 +270,12 @@ describe('IntroCard', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/IntroCard.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `IntroCard`**
+- [x] **Step 3: Implement `IntroCard`**
 
 Create `src/components/bento/IntroCard.tsx`:
 - Render username badge `@cuongnsm` and pulse dot `Open to opportunities`.
@@ -285,12 +285,12 @@ Create `src/components/bento/IntroCard.tsx`:
 - Mini Map Widget with vector radar lines, live Hanoi GMT+7 clock updating every 10 seconds, and pulsing locator dot.
 - Action buttons: "Contact me" (prominent rounded white button) and "CV" (glassmorphic pill button linking to PDF).
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/components/bento/__tests__/IntroCard.test.tsx`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bento/IntroCard.tsx src/components/bento/__tests__/IntroCard.test.tsx
@@ -316,7 +316,7 @@ git commit -m "feat: implement intro bento card with live hanoi radar clock"
   export function Hero3DCard(props: Hero3DCardProps): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `Hero3DCard`**
+- [x] **Step 1: Write failing test for `Hero3DCard`**
 
 Create `src/components/bento/__tests__/Hero3DCard.test.tsx`:
 ```typescript
@@ -332,12 +332,12 @@ describe('Hero3DCard', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/Hero3DCard.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `Hero3DCard` with Spline Loader and Interactive 3D Fallback**
+- [x] **Step 3: Implement `Hero3DCard` with Spline Loader and Interactive 3D Fallback**
 
 Create `src/components/bento/Hero3DCard.tsx`:
 - Outer container: `rounded-[28px] border border-white/10 bg-[#121214]/90 overflow-hidden relative`.
@@ -349,12 +349,12 @@ Create `src/components/bento/Hero3DCard.tsx`:
 - Interactive CSS 3D Digital Pass fallback that tracks mouse position (`perspective: 1000px`, `rotateX`, `rotateY`) so that if Spline is loading or unavailable, the user still experiences an ultra-sleek 3D card experience.
 - Bottom subtitle: `"Digital Pass · Interactive 3D"`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/components/bento/__tests__/Hero3DCard.test.tsx`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bento/Hero3DCard.tsx src/components/bento/__tests__/Hero3DCard.test.tsx
@@ -381,7 +381,7 @@ git commit -m "feat: implement hero 3d bento card with spline and interactive fa
   export function SocialHubCard(props: SocialHubCardProps): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `SocialHubCard`**
+- [x] **Step 1: Write failing test for `SocialHubCard`**
 
 Create `src/components/bento/__tests__/SocialHubCard.test.tsx`:
 ```typescript
@@ -398,12 +398,12 @@ describe('SocialHubCard', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/SocialHubCard.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `SocialHubCard`**
+- [x] **Step 3: Implement `SocialHubCard`**
 
 Create `src/components/bento/SocialHubCard.tsx`:
 - Render central glowing core with personal monogram / glowing orb.
@@ -411,12 +411,12 @@ Create `src/components/bento/SocialHubCard.tsx`:
 - Magnetic hover micro-interactions using Framer Motion (`whileHover={{ scale: 1.15 }}`).
 - Accessible tooltips and labels.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/components/bento/__tests__/SocialHubCard.test.tsx`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bento/SocialHubCard.tsx src/components/bento/__tests__/SocialHubCard.test.tsx
@@ -445,7 +445,7 @@ git commit -m "feat: implement hexagonal radial social hub card"
   export function ProjectDetailModal(props: { project: BentoProject | null; onClose: () => void; locale: 'en' | 'vi' }): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `LatestProjectsCard` & `ProjectDetailModal`**
+- [x] **Step 1: Write failing test for `LatestProjectsCard` & `ProjectDetailModal`**
 
 Create `src/components/bento/__tests__/ProjectsCard.test.tsx`:
 ```typescript
@@ -472,12 +472,12 @@ describe('LatestProjectsCard & Modal', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/ProjectsCard.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `LatestProjectsCard` and `ProjectDetailModal`**
+- [x] **Step 3: Implement `LatestProjectsCard` and `ProjectDetailModal`**
 
 - `LatestProjectsCard.tsx`:
   - Vertical list of case study cards with individual gradient avatar icons, title, subtitle, and `ArrowUpRight` icon.
@@ -487,12 +487,12 @@ Expected: FAIL
   - Framer Motion `AnimatePresence` backdrop overlay with `backdrop-blur-md`.
   - Slide-over card from right (or centered dialog on mobile) with full project problem statement, technical solution, tech tags, and GitHub/Live demo button.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test src/components/bento/__tests__/ProjectsCard.test.tsx`  
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/bento/LatestProjectsCard.tsx src/components/bento/ProjectDetailModal.tsx src/components/bento/__tests__/ProjectsCard.test.tsx
@@ -521,7 +521,7 @@ git commit -m "feat: implement latest projects card and slide-over detail modal"
   export function BentoLayout(props: BentoLayoutProps): React.JSX.Element
   ```
 
-- [ ] **Step 1: Write failing test for `BentoLayout`**
+- [x] **Step 1: Write failing test for `BentoLayout`**
 
 Create `src/components/bento/__tests__/BentoLayout.test.tsx`:
 ```typescript
@@ -548,12 +548,12 @@ describe('BentoLayout', () => {
 })
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test src/components/bento/__tests__/BentoLayout.test.tsx`  
 Expected: FAIL
 
-- [ ] **Step 3: Implement `BentoLayout` with Color Wipe and Content Transition**
+- [x] **Step 3: Implement `BentoLayout` with Color Wipe and Content Transition**
 
 Create `src/components/bento/BentoLayout.tsx`:
 - Fixed 3-column desktop container (`grid-cols-12`) / 1-column mobile.
@@ -564,16 +564,16 @@ Create `src/components/bento/BentoLayout.tsx`:
 - Top subtle utility bar: Quick language switch (`EN | VI`), quick Blog link.
 - ContactModal with email, copy email action, and direct mailto.
 
-- [ ] **Step 4: Connect `BentoLayout` into `src/App.tsx`**
+- [x] **Step 4: Connect `BentoLayout` into `src/App.tsx`**
 
 Integrate `BentoLayout` into `src/App.tsx` as the main view when `!isBlog`, preserving the `/blog` and `/blog/:slug` markdown reader routes.
 
-- [ ] **Step 5: Run tests to verify all pass**
+- [x] **Step 5: Run tests to verify all pass**
 
 Run: `npm test`  
 Expected: ALL PASS
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/bento/BentoLayout.tsx src/components/bento/ContactModal.tsx src/components/bento/__tests__/BentoLayout.test.tsx src/App.tsx
@@ -588,7 +588,7 @@ git commit -m "feat: assemble complete bento grid dashboard with vinyl track swi
 - Modify: `src/styles.css` (if any micro-adjustments needed)
 - Test: Full test suite + production build
 
-- [ ] **Step 1: Run linter and typecheck**
+- [x] **Step 1: Run linter and typecheck**
 
 Run:
 ```bash
@@ -597,7 +597,7 @@ npm run build
 ```
 Expected: 0 errors, production build succeeds.
 
-- [ ] **Step 2: Run all unit & integration tests**
+- [x] **Step 2: Run all unit & integration tests**
 
 Run:
 ```bash
@@ -605,9 +605,10 @@ npm test
 ```
 Expected: All tests pass.
 
-- [ ] **Step 3: Final Commit**
+- [x] **Step 3: Final Commit**
 
 ```bash
 git add -A
 git commit -m "refactor: polish bento grid layout, responsive breakpoints, and transitions"
 ```
+

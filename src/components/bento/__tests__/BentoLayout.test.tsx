@@ -36,3 +36,4 @@ describe('BentoLayout', () => {
     expect(handleDevModeChange).toHaveBeenCalledWith('game')
   })
 })
+

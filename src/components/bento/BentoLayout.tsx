@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, Globe2, Sparkles } from 'lucide-react'
+import { BookOpen, Globe2 } from 'lucide-react'
 import type { BentoProject, BentoTrack } from '../../data/bentoData'
 import { IntroCard } from './IntroCard'
 import { Hero3DCard } from './Hero3DCard'
@@ -204,3 +204,4 @@ export function BentoLayout({
     </div>
   )
 }
+

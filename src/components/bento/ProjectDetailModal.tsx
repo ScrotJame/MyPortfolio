@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, CheckCircle2, Code2, ExternalLink, X } from 'lucide-react'
+import { ArrowUpRight, CheckCircle2, ExternalLink, X } from 'lucide-react'
 import type { BentoProject } from '../../data/bentoData'
 import { Github } from '../SocialIcons'
 
@@ -147,3 +147,4 @@ export function ProjectDetailModal({ project, onClose, locale }: ProjectDetailMo
     </AnimatePresence>
   )
 }
+

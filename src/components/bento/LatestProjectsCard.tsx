@@ -66,3 +66,4 @@ export function LatestProjectsCard({ track, locale, onSelectProject }: LatestPro
     </article>
   )
 }
+

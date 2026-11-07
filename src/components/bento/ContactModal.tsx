@@ -118,3 +118,4 @@ export function ContactModal({ isOpen, onClose, locale }: ContactModalProps) {
     </AnimatePresence>
   )
 }
+

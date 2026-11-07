@@ -121,3 +121,4 @@ export function IntroCard({ track, locale, onContactClick }: IntroCardProps) {
     </article>
   )
 }
+

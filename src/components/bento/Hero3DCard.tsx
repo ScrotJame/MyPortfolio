@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense, lazy } from 'react'
+import { useState, useRef, Suspense, lazy } from 'react'
 import { Sparkles, Compass } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
 
