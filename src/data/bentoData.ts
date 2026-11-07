@@ -163,6 +163,29 @@ export const bentoProjects: Record<BentoTrack, BentoProject[]> = {
           'Duy trì hiệu năng cuộn mượt 60fps thông qua kỹ thuật ảo hóa danh sách.'
         ]
       }
+    },
+    {
+      id: 'agentic-hub',
+      title: { en: 'Agentic Workflow Studio', vi: 'Studio quy trình AI Agent' },
+      category: { en: 'AI Engineering · Autonomous Tools', vi: 'Kỹ thuật AI · Công cụ tự động' },
+      description: {
+        en: 'Autonomous developer assistant environment orchestrating multi-agent collaboration and real-time execution.',
+        vi: 'Môi trường trợ lý lập trình tự hành điều phối đa tác tử AI và thực thi tác vụ thời gian thực.'
+      },
+      iconGradient: 'from-blue-600 to-indigo-600',
+      tech: ['TypeScript', 'FastAPI', 'Claude/Gemini APIs', 'Docker'],
+      details: {
+        en: [
+          'Architected decoupled agent protocols with asynchronous tool execution loops.',
+          'Implemented self-correcting code generation and static verification pipelines.',
+          'Delivered real-time streaming output with low-latency WebSocket connections.'
+        ],
+        vi: [
+          'Thiết kế giao thức agent phân tán với vòng lặp thực thi công cụ bất đồng bộ.',
+          'Xây dựng pipeline sinh mã tự sửa lỗi và kiểm chứng tĩnh trước khi chạy.',
+          'Cung cấp phản hồi streaming thời gian thực qua kết nối WebSocket độ trễ thấp.'
+        ]
+      }
     }
   ],
   game: [
@@ -209,6 +232,75 @@ export const bentoProjects: Record<BentoTrack, BentoProject[]> = {
           'Lập trình di chuyển nhân vật nhạy bén và xử lý va chạm vật lý tùy chỉnh.',
           'Thiết kế hiệu ứng hạt thủ tục và kích hoạt âm thanh khi va chạm.',
           'Kiểm tra hiệu năng CPU/GPU trên thiết bị di động bằng Unity Profiler.'
+        ]
+      }
+    },
+    {
+      id: 'unity-shader-lab',
+      title: { en: '3D Shader Lab & Procedural FX', vi: 'Phòng thí nghiệm Shader 3D & FX' },
+      category: { en: 'Technical Art · Shaders & Lighting', vi: 'Technical Art · Shader & Chiếu sáng' },
+      description: {
+        en: 'Custom vertex/fragment shaders, holographic shields, and post-processing visual pipelines.',
+        vi: 'Shader đỉnh/phân mảnh tùy chỉnh, khiên năng lượng hologram và pipeline xử lý hậu kỳ.'
+      },
+      iconGradient: 'from-fuchsia-600 to-pink-600',
+      tech: ['Shader Graph', 'HLSL', 'URP', 'VFX Graph'],
+      details: {
+        en: [
+          'Authored high-performance surface and unlit shaders in Universal Render Pipeline.',
+          'Created real-time holographic scan lines and fresnel rim lighting effects.',
+          'Optimized fill-rate and draw calls for target 60fps mobile execution.'
+        ],
+        vi: [
+          'Viết shader bề mặt và unlit hiệu năng cao trong Universal Render Pipeline.',
+          'Tạo hiệu ứng quét hologram thời gian thực và ánh sáng viền fresnel.',
+          'Tối ưu hóa fill-rate và draw calls để đảm bảo 60fps trên thiết bị di động.'
+        ]
+      }
+    },
+    {
+      id: 'vr-spatial-quest',
+      title: { en: 'VR Spatial Quest & Physics Rig', vi: 'Không gian VR & Tương tác vật lý' },
+      category: { en: 'XR Experience · Spatial Interaction', vi: 'Trải nghiệm XR · Tương tác không gian' },
+      description: {
+        en: 'Immersive virtual reality prototype featuring hand-tracking physics and spatial audio feedback.',
+        vi: 'Bản mẫu thực tế ảo nhập vai với vật lý tương tác cử chỉ tay và âm thanh không gian 3D.'
+      },
+      iconGradient: 'from-amber-500 to-rose-600',
+      tech: ['Unity XR', 'OpenXR', 'C#', 'Spatial Audio'],
+      details: {
+        en: [
+          'Configured XR Interaction Toolkit with custom grab, throw, and socket behaviors.',
+          'Calibrated haptic feedback curves and 3D spatialized binaural audio sources.',
+          'Designed comfortable locomotion mechanics reducing motion sickness.'
+        ],
+        vi: [
+          'Cấu hình XR Interaction Toolkit với cơ chế cầm nắm, ném và lắp ghép vật lý.',
+          'Tinh chỉnh phản hồi rung xúc giác và nguồn âm thanh vòm 3D định hướng.',
+          'Thiết kế cơ chế di chuyển mượt mà giảm thiểu hiện tượng say chuyển động.'
+        ]
+      }
+    },
+    {
+      id: 'procedural-dungeon',
+      title: { en: 'Procedural 3D Dungeon Crawler', vi: 'Hầm ngục thủ tục 3D' },
+      category: { en: 'Procedural Generation · Algorithms', vi: 'Sinh bản đồ thủ tục · Thuật toán' },
+      description: {
+        en: 'Algorithmic dungeon layout generator with dynamic enemy spawning and loot progression.',
+        vi: 'Bộ sinh kiến trúc hầm ngục tự động theo thuật toán với cơ chế sinh quái và trang bị.'
+      },
+      iconGradient: 'from-rose-600 to-purple-700',
+      tech: ['Unity', 'C#', 'BSP Algorithm', 'NavMesh'],
+      details: {
+        en: [
+          'Implemented Binary Space Partitioning (BSP) for infinite distinct dungeon layouts.',
+          'Generated runtime NavMesh data ensuring valid pathfinding for AI agents.',
+          'Constructed responsive modular room tile sets and dynamic lighting.'
+        ],
+        vi: [
+          'Ứng dụng thuật toán Binary Space Partitioning (BSP) tạo vô số biến thể bản đồ.',
+          'Tự động sinh dữ liệu NavMesh thời gian thực đảm bảo AI tìm đường chính xác.',
+          'Xây dựng bộ tile phòng ốc module hóa và hệ thống chiếu sáng động.'
         ]
       }
     }

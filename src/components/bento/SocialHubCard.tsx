@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Mail, Orbit } from 'lucide-react'
+import { BookOpen, Mail } from 'lucide-react'
 import type { BentoTrack } from '../../data/bentoData'
 import { profile } from '../../data/content'
 import { Figma, Github, Linkedin, Youtube } from '../SocialIcons'
@@ -18,83 +18,79 @@ export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps
       id: 'youtube',
       label: 'YouTube',
       href: 'https://youtube.com',
-      icon: <Youtube size={17} />,
+      icon: <Youtube size={16} />,
       positionClass: 'top-2.5 left-1/2 -translate-x-1/2'
-    },
-    {
-      id: 'figma',
-      label: 'Figma',
-      href: 'https://figma.com',
-      icon: <Figma size={16} />,
-      positionClass: 'top-9 right-6'
     },
     {
       id: 'blog',
       label: 'Blog',
       onClick: onBlogClick,
-      icon: <BookOpen size={16} />,
-      positionClass: 'bottom-9 right-6'
+      icon: <BookOpen size={15} />,
+      positionClass: 'top-9 right-6'
     },
     {
       id: 'linkedin',
       label: 'LinkedIn',
       href: profile.linkedin,
-      icon: <Linkedin size={16} />,
+      icon: <Linkedin size={15} />,
+      positionClass: 'bottom-9 right-6'
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      href: 'mailto:cuongnsm@gmail.com',
+      icon: <Mail size={15} />,
       positionClass: 'bottom-2.5 left-1/2 -translate-x-1/2'
     },
     {
       id: 'github',
       label: 'GitHub',
       href: profile.github,
-      icon: <Github size={17} />,
+      icon: <Github size={16} />,
       positionClass: 'bottom-9 left-6'
     },
     {
-      id: 'email',
-      label: 'Email',
-      href: 'mailto:cuongnsm@gmail.com',
-      icon: <Mail size={16} />,
+      id: 'figma',
+      label: 'Figma',
+      href: 'https://figma.com',
+      icon: <Figma size={15} />,
       positionClass: 'top-9 left-6'
     }
   ]
 
   return (
-    <article className="flex flex-col justify-between h-full min-h-[250px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-5 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
-      {/* Top Header */}
-      <div className="flex items-center justify-between z-10">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-white/50 flex items-center gap-1.5">
-          <Orbit size={13} className={isApp ? 'text-emerald-400' : 'text-purple-400'} />
-          {locale === 'en' ? 'Social Hub' : 'Kết nối mạng xã hội'}
-        </span>
-        <span className="text-[9px] font-mono text-white/40">6 CHANNELS</span>
-      </div>
+    <article className="flex flex-col items-center justify-center h-full min-h-[220px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-4 relative overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300">
+      {/* Background subtle radial ambient glow */}
+      <div
+        className={`absolute inset-0 opacity-20 pointer-events-none transition-colors duration-700 ${
+          isApp
+            ? 'bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.15)_0%,transparent_70%)]'
+            : 'bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.15)_0%,transparent_70%)]'
+        }`}
+      />
 
-      {/* Hexagonal / Radial Orbital Container */}
-      <div className="relative w-44 h-44 sm:w-48 sm:h-48 mx-auto my-2 flex items-center justify-center">
-        {/* Concentric Orbit Ring Guide */}
-        <div className="absolute inset-2.5 rounded-full border border-white/[0.08] pointer-events-none" />
-        <div className="absolute inset-9 rounded-full border border-white/[0.05] pointer-events-none" />
+      {/* Hexagonal / Radial Orbital Container exactly as aximoris */}
+      <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center select-none">
+        {/* Outer and Inner Concentric Orbit Ring Guides */}
+        <div className="absolute inset-2.5 rounded-full border border-white/[0.06] pointer-events-none" />
+        <div className="absolute inset-8 rounded-full border border-white/[0.04] pointer-events-none" />
 
-        {/* Central Core Orb */}
+        {/* Central Core Gradient Orb (like aximoris multicolor sphere) */}
         <motion.div
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          className={`w-14 h-14 rounded-full flex items-center justify-center z-10 border transition-colors duration-500 shadow-xl ${
-            isApp
-              ? 'bg-gradient-to-br from-emerald-500/20 to-cyan-500/30 border-emerald-400/40 text-emerald-300 shadow-[0_0_25px_rgba(16,185,129,0.25)]'
-              : 'bg-gradient-to-br from-purple-500/20 to-amber-500/30 border-purple-400/40 text-purple-300 shadow-[0_0_25px_rgba(168,85,247,0.25)]'
-          }`}
+          animate={{ scale: [1, 1.06, 1], rotate: [0, 180, 360] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center z-10 border border-white/20 shadow-[0_0_24px_rgba(129,140,248,0.35)] cursor-default bg-gradient-to-tr from-cyan-400 via-indigo-500 to-fuchsia-500"
         >
-          <span className="text-xs font-black tracking-tighter">mc.</span>
+          <div className="w-5 h-5 rounded-full bg-white/25 backdrop-blur-sm shadow-inner" />
         </motion.div>
 
-        {/* 6 Radial Satellite Items */}
+        {/* 6 Radial Sockets */}
         {links.map((item) => {
           const content = (
             <motion.div
-              whileHover={{ scale: 1.2, y: -2 }}
+              whileHover={{ scale: 1.15, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="w-9 h-9 rounded-full bg-white/[0.06] hover:bg-white/[0.15] border border-white/10 hover:border-white/30 text-white/80 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
+              className="w-10 h-10 rounded-2xl bg-[#18181b]/90 hover:bg-white/[0.12] border border-white/10 hover:border-white/30 text-white/70 hover:text-white flex items-center justify-center transition-all duration-200 shadow-md cursor-pointer"
             >
               {item.icon}
             </motion.div>
@@ -108,7 +104,7 @@ export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps
                 aria-label={item.label}
                 title={item.label}
                 onClick={item.onClick}
-                className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-full`}
+                className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-2xl`}
               >
                 {content}
               </button>
@@ -123,7 +119,7 @@ export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps
               rel="noreferrer"
               aria-label={item.label}
               title={item.label}
-              className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-full`}
+              className={`absolute ${item.positionClass} z-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 rounded-2xl`}
             >
               {content}
             </a>
@@ -131,10 +127,7 @@ export function SocialHubCard({ track, locale, onBlogClick }: SocialHubCardProps
         })}
       </div>
 
-      {/* Bottom Subtitle */}
-      <div className="text-center text-[10px] text-white/40 font-mono">
-        {locale === 'en' ? 'Click to open channels & links' : 'Bấm để mở các kênh liên kết'}
-      </div>
+      <span className="sr-only">{locale === 'en' ? 'Social Network Hub' : 'Kết nối mạng xã hội'}</span>
     </article>
   )
 }

@@ -94,17 +94,20 @@ export function Hero3DCard({ track, locale, splineSceneUrl }: Hero3DCardProps) {
       onMouseLeave={handleMouseLeave}
       className="relative flex flex-col justify-between h-full min-h-[480px] lg:min-h-[560px] bg-[#121214]/90 border border-white/10 rounded-[28px] p-6 lg:p-7 overflow-hidden backdrop-blur-xl group hover:border-white/20 transition-all duration-300 select-none cursor-grab active:cursor-grabbing"
     >
-      {/* Top Ambient Aura Glow */}
+      {/* Dual Ambient Corner Glows exactly like aximoris.com */}
       <div
-        className={`absolute top-0 left-1/2 -translate-x-1/2 w-4/5 h-64 blur-3xl pointer-events-none transition-all duration-700 opacity-60 group-hover:opacity-90 ${
-          isApp
-            ? 'bg-gradient-to-b from-emerald-500/30 via-cyan-500/20 to-transparent'
-            : 'bg-gradient-to-b from-purple-500/35 via-amber-500/20 to-transparent'
+        className={`absolute -top-16 -left-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-50 group-hover:opacity-80 ${
+          isApp ? 'bg-emerald-500/35' : 'bg-purple-500/35'
+        }`}
+      />
+      <div
+        className={`absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-700 opacity-40 group-hover:opacity-75 ${
+          isApp ? 'bg-blue-600/30' : 'bg-amber-500/30'
         }`}
       />
 
       {/* Dot Matrix Background */}
-      <div className="absolute inset-0 dot-matrix-bg opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 dot-matrix-bg opacity-45 pointer-events-none" />
 
       {/* Top Controls / Meta Pill & Flip Button */}
       <div className="flex items-center justify-between z-10 w-full">
