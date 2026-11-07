@@ -115,22 +115,13 @@ export function BentoLayout({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 lg:gap-4 xl:gap-5 items-stretch lg:h-[600px] xl:h-[640px]">
             {/* Column 1 (Left): Intro Card (Col 4) */}
             <div className="lg:col-span-4 h-full flex flex-col">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`intro-${devMode}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: 'easeOut' }}
-                  className="h-full flex flex-col flex-1"
-                >
-                  <IntroCard
-                    track={devMode}
-                    locale={locale}
-                    onContactClick={() => setIsContactOpen(true)}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <div className="h-full flex flex-col flex-1">
+                <IntroCard
+                  track={devMode}
+                  locale={locale}
+                  onContactClick={() => setIsContactOpen(true)}
+                />
+              </div>
             </div>
 
             {/* Column 2 (Center): Hero 3D Card (Preserves 3D rotation across track changes) */}
@@ -147,39 +138,21 @@ export function BentoLayout({
 
             {/* Column 3 (Right): Stack of Social Hub & Projects (Col 3) */}
             <div className="lg:col-span-3 flex flex-col gap-3.5 sm:gap-4 lg:gap-4 xl:gap-5 h-full">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`social-${devMode}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: 'easeOut', delay: 0.07 }}
-                  className="h-[240px] xl:h-[250px] shrink-0"
-                >
-                  <SocialHubCard
-                    track={devMode}
-                    locale={locale}
-                    onBlogClick={onViewBlog}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <div className="h-[240px] xl:h-[250px] shrink-0">
+                <SocialHubCard
+                  track={devMode}
+                  locale={locale}
+                  onBlogClick={onViewBlog}
+                />
+              </div>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`projects-${devMode}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: 'easeOut', delay: 0.1 }}
-                  className="flex-1 min-h-[280px] lg:min-h-0 flex flex-col"
-                >
-                  <LatestProjectsCard
-                    track={devMode}
-                    locale={locale}
-                    onSelectProject={setSelectedProject}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <div className="flex-1 min-h-[280px] lg:min-h-0 flex flex-col">
+                <LatestProjectsCard
+                  track={devMode}
+                  locale={locale}
+                  onSelectProject={setSelectedProject}
+                />
+              </div>
             </div>
           </div>
         </div>
